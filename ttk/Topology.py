@@ -1,5 +1,6 @@
 import copy
-from ttk.core import Atom, Bond, Chain, Residue, Entity
+
+from ttk.core import Atom, Bond, Chain, Entity, Residue
 from ttk.data import _PROTEIN_LETTERS
 
 
