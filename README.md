@@ -6,8 +6,8 @@ NeoTopology is heavily designed for Protein Design, OpenMM Preparation & Study
 
 This Package contains:
 - IO from files including PDB/PDBx/rdkit
-- Mathatics related with Rotation and Alignment
-- Protein/Sequence/Ligand Calculations.
+- Mathematics related sdk like Rotation and Alignment
+- Protein/Sequence/Ligand Calculations
 
 ## Installation
 NeoTopology can be installed with:
@@ -73,7 +73,10 @@ topology_export.topology_to_pdb(top,fname)
 ### Topology modification
 ```python
 # topology add residue
-top.add_residue(name,top.chains[0])
+res = top.add_residue(name,top.chains[0],res)
+# do some modifications on the resdiue
+res.add_atom(atom)
+
 # chain add residue
 top.chains[0].add_residue(res)
 ```
