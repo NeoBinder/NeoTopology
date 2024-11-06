@@ -1,7 +1,12 @@
 import numpy as np
 
-from ttk.core import (_AMINO_ACID_CODES, _PROTEIN_RESIDUES, _SIMPLE_SOLVENT,
-                      _WATER_RESIDUES, Entity)
+from ttk.core import (
+    _AMINO_ACID_CODES,
+    _PROTEIN_RESIDUES,
+    _SIMPLE_SOLVENT,
+    _WATER_RESIDUES,
+    Entity,
+)
 
 
 class Residue(Entity):
@@ -20,7 +25,7 @@ class Residue(Entity):
         A label for the segment to which this residue belongs
     """
 
-    def __init__(self, name, index, chain, res_seq, segment_id=''):
+    def __init__(self, name, index, chain, res_seq, segment_id=""):
         """Construct a new Residue.  You should call add_residue()
         on the Topology instead of calling this directly."""
         self.name = name
@@ -32,7 +37,7 @@ class Residue(Entity):
         self.property_computed = {}
 
     def __str__(self):
-        return '%s-%s' % (self.name, self.res_seq)
+        return "%s-%s" % (self.name, self.res_seq)
 
     def __repr__(self):
         return "Residue:{} at {}".format(str(self), hex(id(self)))

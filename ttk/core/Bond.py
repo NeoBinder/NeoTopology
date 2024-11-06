@@ -22,6 +22,7 @@ class BondType(object):
 
     def to_rdkit(self):
         from rdkit.Chem import BondType as rdkit_BondType
+
         name2rdkit = {
             "Single": rdkit_BondType.SINGLE,
             "Double": rdkit_BondType.DOUBLE,
@@ -67,13 +68,14 @@ float2bondtype = {
     1.25: Amide,
     1.5: Aromatic,
     2.0: Double,
-    3.0: Triple
+    3.0: Triple,
 }
 bondname2bondtype = {"covale": Single}
 
 
 def from_rdkit_bond(bond):
     from rdkit.Chem import BondType as rdkit_BondType
+
     bond_dict = {
         rdkit_BondType.SINGLE: Single,
         rdkit_BondType.DOUBLE: Double,
@@ -103,7 +105,7 @@ def from_bond_name(bond_name):
     return bondname2bondtype[bond_name]
 
 
-class Bond():
+class Bond:
     """A Bond representation of a bond between two Atoms within a Topology
     Attributes
     ----------
@@ -131,8 +133,10 @@ class Bond():
 
     def __eq__(self, bond):
         if bond.type == self.type:
-            if self.atom1 in [bond.atom1, bond.atom2
-                              ] and self.atom2 in [bond.atom1, bond.atom2]:
+            if self.atom1 in [bond.atom1, bond.atom2] and self.atom2 in [
+                bond.atom1,
+                bond.atom2,
+            ]:
                 return True
         return False
 

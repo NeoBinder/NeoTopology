@@ -23,24 +23,31 @@ def find_interface(chain1, chain2, threshold=0.3):
     return c1_interface_residues, c2_interface_residues
 
 
+def have_interface_ligands(
+    topology, mass_threshold=100.0, distance_threshold=5.0, sequence_length_threshold=50
+):
 
-
-
-def have_interface_ligands(topology, mass_threshold=100.0, distance_threshold=5.0,sequence_length_threshold=50):
-    
-    def filter_ligand(res,mass_threshold):
+    def filter_ligand(res, mass_threshold):
         if res.is_protein or res.is_water or res.mass < mass_threshold:
             return False
         return True
 
-    filtered_ligands = list(filter(lambda x:filter_ligand(x,mass_threshold) , topology.residues))
-    if len(filtered_ligands) == 0: 
+    filtered_ligands = list(
+        filter(lambda x: filter_ligand(x, mass_threshold), topology.residues)
+    )
+    if len(filtered_ligands) == 0:
         return False
-    filtered_chains = [chain for chain in topology.chains if chain.is_protein_chain() and len(chain.residues) > sequence_length_threshold]
+    filtered_chains = [
+        chain
+        for chain in topology.chains
+        if chain.is_protein_chain() and len(chain.residues) > sequence_length_threshold
+    ]
     if len(filtered_chains) != 2:
-        #print(filtered_chains)
-        #print("{} is not dimer".format(pdbid))
+        # print(filtered_chains)
+        # print("{} is not dimer".format(pdbid))
         return False
     for ligand in filtered_ligands:
-        if filtered_chains[0].is_close(ligand,distance_threshold) and  filtered_chains[1].is_close(ligand,distance_threshold):
+        if filtered_chains[0].is_close(ligand, distance_threshold) and filtered_chains[
+            1
+        ].is_close(ligand, distance_threshold):
             return True

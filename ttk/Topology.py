@@ -1,5 +1,6 @@
 import copy
-from ttk.core import Atom, Bond, Chain, Residue, Entity
+
+from ttk.core import Atom, Bond, Chain, Entity, Residue
 from ttk.data import _PROTEIN_LETTERS
 
 
@@ -9,8 +10,7 @@ def expand_symmetry(top):
     for k, rmatrix in symmetry_matrices.items():
         current_top = copy.deepcopy(top)
         positions = current_top.positions
-        current_top.positions = rmatrix.apply(
-            positions.magnitude) * positions.units
+        current_top.positions = rmatrix.apply(positions.magnitude) * positions.units
         newtop.add_topology(current_top)
     return newtop
 
@@ -31,7 +31,7 @@ class Topology(Entity):
 
     @property
     def n_residues(self):
-        """Get the number of residues in the Topology. """
+        """Get the number of residues in the Topology."""
         n_res = sum([len(chain.residues) for chain in self.chains])
         return n_res
 
@@ -98,14 +98,9 @@ class Topology(Entity):
     #########################################
     # add operation
     #########################################
-    def add_atom(self,
-                 name,
-                 element,
-                 residue,
-                 is_hetero,
-                 position=None,
-                 index=0,
-                 **kwargs):
+    def add_atom(
+        self, name, element, residue, is_hetero, position=None, index=0, **kwargs
+    ):
         """Create a new Atom and add it to the Topology.
         Parameters
         ----------
@@ -189,16 +184,17 @@ class Topology(Entity):
         for chain in add_topology.chains:
             newchain = self.add_chain()
             for res in chain.residues:
-                newres = self.add_residue(res.name,
-                                          newchain,
-                                          res_seq=res.res_seq,
-                                          segment_id=res.segment_id)
+                newres = self.add_residue(
+                    res.name, newchain, res_seq=res.res_seq, segment_id=res.segment_id
+                )
                 for atom in res.atoms:
-                    newatom = self.add_atom(atom.name,
-                                            atom.element,
-                                            newres,
-                                            atom.is_hetero,
-                                            position=atom.position)
+                    newatom = self.add_atom(
+                        atom.name,
+                        atom.element,
+                        newres,
+                        atom.is_hetero,
+                        position=atom.position,
+                    )
                     atom_map[atom] = newatom
         for atom in add_topology.get_atoms():
             newatom = atom_map[atom]

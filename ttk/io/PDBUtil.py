@@ -140,8 +140,7 @@ def parse_remark_465(line):
     """
     if line:
         # Note that line has been stripped.
-        assert line[0] != " " and line[
-            -1] not in "\n ", "line has to be stripped"
+        assert line[0] != " " and line[-1] not in "\n ", "line has to be stripped"
     pattern = re.compile(
         r"""
         (\d+\s[\sA-Z][\sA-Z][A-Z] |   # Either model number + residue name
@@ -188,16 +187,8 @@ def parse_pdb_header_list(header):
         "journal_reference": "unknown",
         "periodic_box": None,
         "author": "",
-        "compound": {
-            "1": {
-                "misc": ""
-            }
-        },
-        "source": {
-            "1": {
-                "misc": ""
-            }
-        },
+        "compound": {"1": {"misc": ""}},
+        "source": {"1": {"misc": ""}},
         "has_missing_residues": False,
         "missing_residues": [],
     }
@@ -225,8 +216,7 @@ def parse_pdb_header_list(header):
         elif key == "HEADER":
             rr = re.search(r"\d\d-\w\w\w-\d\d", tail)
             if rr is not None:
-                pdbh_dict["deposition_date"] = format_date(
-                    nice_case(rr.group()))
+                pdbh_dict["deposition_date"] = format_date(nice_case(rr.group()))
             rr = re.search(r"\s+([1-9][0-9A-Z]{3})\s*\Z", tail)
             if rr is not None:
                 pdbh_dict["idcode"] = rr.group(1)
@@ -251,8 +241,7 @@ def parse_pdb_header_list(header):
                     pdbh_dict["compound"][comp_molid][ckey] = cval
                     last_comp_key = ckey
             else:
-                pdbh_dict["compound"][comp_molid][
-                    last_comp_key] += tok[0] + " "
+                pdbh_dict["compound"][comp_molid][last_comp_key] += tok[0] + " "
         elif key == "SOURCE":
             tt = re.sub(r"\;\s*\Z", "", chop_end_codes(tail)).lower()
             tok = tt.split(":")
@@ -319,15 +308,15 @@ def parse_pdb_header_list(header):
             elif hh.startswith("REMARK  99 ASTRAL"):
                 if tail:
                     remark_99_keyval = tail.replace("ASTRAL ", "").split(": ")
-                    if type(remark_99_keyval) == list and len(
-                            remark_99_keyval) == 2:
+                    if type(remark_99_keyval) == list and len(remark_99_keyval) == 2:
                         if "astral" not in pdbh_dict:
                             pdbh_dict["astral"] = {
                                 remark_99_keyval[0]: remark_99_keyval[1]
                             }
                         else:
-                            pdbh_dict["astral"][
-                                remark_99_keyval[0]] = remark_99_keyval[1]
+                            pdbh_dict["astral"][remark_99_keyval[0]] = remark_99_keyval[
+                                1
+                            ]
         else:
             # print(key)
             pass

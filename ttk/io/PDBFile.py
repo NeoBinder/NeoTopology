@@ -9,8 +9,7 @@ from ttk.core import element_from_symbol, UnitCell, from_bond_float
 from .PDBUtil import parse_pdb_header_list, split_pdb_content
 
 
-
-class PDBParser():
+class PDBParser:
 
     def __init__(self, config=None, **kwargs):
         if config is None:
@@ -21,7 +20,7 @@ class PDBParser():
         self.header = None
         self._current_topology = None
         self.topologies = []
-        self._filetype = kwargs.get('filetype', "pdb")
+        self._filetype = kwargs.get("filetype", "pdb")
         self._current_topology_id = 0
 
     @property
@@ -35,12 +34,12 @@ class PDBParser():
         header, models = split_pdb_content(content)
         self.header = parse_pdb_header_list(header)
         self.parse_models(models)
-        if self.header['periodic_box']:
-            periodic_box = UnitCell.from_content(self.header['periodic_box'])
+        if self.header["periodic_box"]:
+            periodic_box = UnitCell.from_content(self.header["periodic_box"])
             for top in self.topologies:
                 top.periodic_box = periodic_box
-        if len(self.header['symmetry_rotation_matrix'].keys()):
-            top.symmetry = self.header['symmetry_rotation_matrix']
+        if len(self.header["symmetry_rotation_matrix"].keys()):
+            top.symmetry = self.header["symmetry_rotation_matrix"]
 
     def add_model(self, line=None):
         if line is None:
@@ -62,11 +61,15 @@ class PDBParser():
 
     def parse_residue(self, resname, chain, resseq):
         current_residue = self._parse_dict.get("current_residue")
-        if current_residue is None or current_residue.name != resname or \
-                current_residue.res_seq != resseq:
+        if (
+            current_residue is None
+            or current_residue.name != resname
+            or current_residue.res_seq != resseq
+        ):
             current_residue = self._current_topology.add_residue(
-                resname, chain, res_seq=resseq)
-            self._parse_dict['current_residue'] = current_residue
+                resname, chain, res_seq=resseq
+            )
+            self._parse_dict["current_residue"] = current_residue
         return current_residue
 
     def parse_atom(self, line, current_residue):
@@ -99,7 +102,7 @@ class PDBParser():
             temperature_factor = 0.0
         element_symbol = line[76:78].strip()
         if element_symbol == self.config.get("extraParticleIdentifier", "EP"):
-            element = 'EP'
+            element = "EP"
         else:
             atom_element = element_from_symbol(element_symbol)
         try:
@@ -109,35 +112,39 @@ class PDBParser():
 
         is_hetero = line[:6] == "HETATM"
 
-        self._current_topology.add_atom(fullname,
-                                        atom_element,
-                                        current_residue,
-                                        position=unit.Quantity(
-                                            np.array([x, y, z]) / 10, "nm"),
-                                        index=serial_number,
-                                        formal_charge=formal_charge,
-                                        temperature_factor=temperature_factor,
-                                        occupancy=occupancy,
-                                        is_hetero=is_hetero)
+        self._current_topology.add_atom(
+            fullname,
+            atom_element,
+            current_residue,
+            position=unit.Quantity(np.array([x, y, z]) / 10, "nm"),
+            index=serial_number,
+            formal_charge=formal_charge,
+            temperature_factor=temperature_factor,
+            occupancy=occupancy,
+            is_hetero=is_hetero,
+        )
 
     def parse_bonds(self, bonds):
         top = self.topologies[-1]
         atom_maps = {atom.index: atom for atom in top.atoms}
         bond_dict = {}
         for bond in bonds:
-            bond = " ".join([
-                bond[6:11], bond[11:16], bond[16:21], bond[21:26], bond[26:31]
-            ]).split()
+            bond = " ".join(
+                [bond[6:11], bond[11:16], bond[16:21], bond[21:26], bond[26:31]]
+            ).split()
             bond = list(map(int, bond))
             if len(bond) > 1:
                 bond_dict[bond[0]] = Counter(bond[1:]) + bond_dict.get(
-                    bond[0], Counter())
+                    bond[0], Counter()
+                )
 
         for source_atom_idx, atom_bond_dict in bond_dict.items():
             for target_atom_idx, bond_order in atom_bond_dict.items():
-                top.add_bond(atom_maps[source_atom_idx],
-                             atom_maps[target_atom_idx],
-                             from_bond_float(float(bond_order)))
+                top.add_bond(
+                    atom_maps[source_atom_idx],
+                    atom_maps[target_atom_idx],
+                    from_bond_float(float(bond_order)),
+                )
         pass
 
     def parse_models(self, models):
@@ -156,8 +163,7 @@ class PDBParser():
 
                 resname = line[17:20].strip()
                 resseq = int(line[22:26].split()[0])  # sequence identifier
-                current_residue = self.parse_residue(resname, current_chain,
-                                                     resseq)
+                current_residue = self.parse_residue(resname, current_chain, resseq)
                 # atom name,element,residue,position
                 current_atom = self.parse_atom(line, current_residue)
 
@@ -173,31 +179,62 @@ class PDBParser():
             elif record_type in ("SIGUIJ", "SIGATM"):
                 raise NotImplemented("valid value without implementation")
             elif record_type not in {
-                    "ATOM",
-                    "HETATM",
-                    "MODEL",
-                    "ENDMDL",
-                    "TER",
-                    "ANISOU",
-                    # These are older 2.3 format specs:
-                    "SIGATM",
-                    "SIGUIJ",
-                    # bookkeeping records after coordinates:
-                    "MASTER",
+                "ATOM",
+                "HETATM",
+                "MODEL",
+                "ENDMDL",
+                "TER",
+                "ANISOU",
+                # These are older 2.3 format specs:
+                "SIGATM",
+                "SIGUIJ",
+                # bookkeeping records after coordinates:
+                "MASTER",
             }:
                 UNKNOWN_RECORD_TYPE.append(record_type)
                 #  raise ValueError("invalid value {}".format(line))
                 print(
-                    "There are unknown record type:{}\n Please pay attention or ignore it"
-                    .format(set(UNKNOWN_RECORD_TYPE)))
+                    "There are unknown record type:{}\n Please pay attention or ignore it".format(
+                        set(UNKNOWN_RECORD_TYPE)
+                    )
+                )
         self.parse_bonds(bonds)
 
 
-class PDBFile():
+class PDBFile:
     standardResidues = {
-        'ALA', 'ASN', 'CYS', 'GLU', 'HIS', 'HID', 'LEU', 'MET', 'PRO', 'THR',
-        'TYR', 'ARG', 'ASP', 'GLN', 'GLY', 'ILE', 'LYS', 'PHE', 'SER', 'TRP',
-        'VAL', 'A', 'G', 'C', 'U', 'I', 'DA', 'DG', 'DC', 'DT', 'DI', 'HOH'
+        "ALA",
+        "ASN",
+        "CYS",
+        "GLU",
+        "HIS",
+        "HID",
+        "LEU",
+        "MET",
+        "PRO",
+        "THR",
+        "TYR",
+        "ARG",
+        "ASP",
+        "GLN",
+        "GLY",
+        "ILE",
+        "LYS",
+        "PHE",
+        "SER",
+        "TRP",
+        "VAL",
+        "A",
+        "G",
+        "C",
+        "U",
+        "I",
+        "DA",
+        "DG",
+        "DC",
+        "DT",
+        "DI",
+        "HOH",
     }
 
     def __init__(self, config=None, **kwargs):
@@ -211,8 +248,8 @@ class PDBFile():
     @staticmethod
     def generate_header():
         return "REMARK CREATED WITH ttk {}, {} \n".format(
-            ttk.__version__,
-            datetime.datetime.now().strftime("%Y-%m-%d"))
+            ttk.__version__, datetime.datetime.now().strftime("%Y-%m-%d")
+        )
 
     @staticmethod
     def generate_cryst(periodic_box):
@@ -246,30 +283,31 @@ class PDBFile():
                         desc += "{:<4} ".format(atom.name)
                     else:
                         raise Exception(
-                            'atom name \'{}\' is longger than 4 !!'.format(
-                                atom.name))
+                            "atom name '{}' is longger than 4 !!".format(atom.name)
+                        )
                     if len(res.name) > 3:
                         resname = res.name[:3]
                     else:
                         resname = res.name
                     desc += "{:>3} ".format(resname)
                     desc += chain.id
-                    if config.get('use_res_index'):
+                    if config.get("use_res_index"):
                         desc += "{:>4} ".format(res.index)
                     else:
                         desc += "{:>4} ".format(res.res_seq)
                     desc += "   "
                     desc += "{:8.3f}{:8.3f}{:8.3f}".format(
-                        *(atom.position.to('angstrom').magnitude))
-                    desc += "{:6.2f}{:6.2f}".format(atom.occupancy,
-                                                    atom.bfactor)
+                        *(atom.position.to("angstrom").magnitude)
+                    )
+                    desc += "{:6.2f}{:6.2f}".format(atom.occupancy, atom.bfactor)
                     desc += "      "
                     desc += res.segment_id.rjust(4, " ")
                     desc += atom.symbol.rjust(2, " ")
-                    content += (desc + "\n")
+                    content += desc + "\n"
             index += 1
             desc = "TER   {:>5}      {} {} {:>3}\n".format(
-                index, resname, chain.id, res.res_seq)
+                index, resname, chain.id, res.res_seq
+            )
             content += desc
         return content
 

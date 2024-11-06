@@ -1,4 +1,3 @@
-
 import ttk
 from ttk.io import PDBFile
 
@@ -17,15 +16,16 @@ def topology_from_indices(topology, indices, start_idx=1):
             intersection = residue_atom_indices.intersection(indices_set)
             if len(intersection) == 0:
                 continue
-            r = top.add_residue(residue.name, c, residue.res_seq,
-                                residue.segment_id)
+            r = top.add_residue(residue.name, c, residue.res_seq, residue.segment_id)
             for atom in residue.atoms:
                 if atom.index in intersection:
-                    newatom = top.add_atom(atom.name,
-                                           atom.element,
-                                           r,
-                                           atom.position,
-                                           origin_index=atom.index)
+                    newatom = top.add_atom(
+                        atom.name,
+                        atom.element,
+                        r,
+                        atom.position,
+                        origin_index=atom.index,
+                    )
                     atom_map[atom] = newatom
     for bond in topology.get_bonds():
         a1, a2 = bond.atom1, bond.atom2
@@ -45,6 +45,7 @@ def topology_to_pdb(ttk_topology, fname=None):
 def topology_to_openmm(ttk_topology):
     from openmm.app import Element, Topology
     from openmm.unit import nanometer
+
     newTopology = Topology()
     newTopology.setPeriodicBoxVectors(ttk_topology.periodic_box.to_openmm())
     newAtoms = {}
@@ -52,20 +53,23 @@ def topology_to_openmm(ttk_topology):
     for chain in ttk_topology.chains:
         newChain = newTopology.addChain(chain.id)
         for residue in chain.residues:
-            newResidue = newTopology.addResidue(residue.name, newChain,
-                                                residue.res_seq,
-                                                residue.segment_id)
+            newResidue = newTopology.addResidue(
+                residue.name, newChain, residue.res_seq, residue.segment_id
+            )
             for atom in residue.atoms:
                 newAtom = newTopology.addAtom(
-                    atom.name, Element.getBySymbol(atom.element.symbol),
-                    newResidue, atom.index)
+                    atom.name,
+                    Element.getBySymbol(atom.element.symbol),
+                    newResidue,
+                    atom.index,
+                )
                 newAtoms[hash(atom)] = newAtom
                 # newPositions.append(atom.position * nanometer)
                 newPositions.append(
-                    atom.position.to(ttk.unit.nanometer).magnitude * nanometer)
+                    atom.position.to(ttk.unit.nanometer).magnitude * nanometer
+                )
     for bond in ttk_topology.get_bonds():
-        newTopology.addBond(newAtoms[hash(bond.atom1)],
-                            newAtoms[hash(bond.atom2)])
+        newTopology.addBond(newAtoms[hash(bond.atom1)], newAtoms[hash(bond.atom2)])
     return newTopology, newPositions
 
 
@@ -73,7 +77,7 @@ def topology2geom(model, charge):
     topology = model
     is_open_shelled = False
     geom = ""
-    line = ' {:3} {: > 7.3f} {: > 7.3f} {: > 7.3f} \n'
+    line = " {:3} {: > 7.3f} {: > 7.3f} {: > 7.3f} \n"
     total_elec = 0
     for atom in topology.get_atoms():
         #  x, y, z = positions[i][0], positions[i][1], positions[i][2]

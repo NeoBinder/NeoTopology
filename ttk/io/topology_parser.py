@@ -5,16 +5,15 @@ import numpy as np
 
 import ttk
 from ttk import Topology
-from ttk.core import (UnitCell, element_from_symbol, from_bond_float,
-                      from_rdkit_bond)
+from ttk.core import UnitCell, element_from_symbol, from_bond_float, from_rdkit_bond
 from ttk.io import PDBParser, PDBxParser
 
 
-def topology_from_openmmm(mm_topology,
-                          positions=None,
-                          keepIdx=True,
-                          parse_protein_bond=True):
+def topology_from_openmmm(
+    mm_topology, positions=None, keepIdx=True, parse_protein_bond=True
+):
     import openmm
+
     top = Topology()
 
     top.periodic_box = UnitCell.from_openmm(mm_topology, positions)
@@ -35,16 +34,16 @@ def topology_from_openmmm(mm_topology,
                     idx = atom.index
                 else:
                     idx = 0
-                newatom = top.add_atom(atom.name,
-                                       element_from_symbol(
-                                           atom.element.symbol),
-                                       res,
-                                       pos,
-                                       index=idx)
+                newatom = top.add_atom(
+                    atom.name,
+                    element_from_symbol(atom.element.symbol),
+                    res,
+                    pos,
+                    index=idx,
+                )
                 atom_map[atom] = newatom
     for bond in mm_topology.bonds():
-        top.add_bond(atom_map[bond[0]], atom_map[bond[1]],
-                     from_bond_float(bond.order))
+        top.add_bond(atom_map[bond[0]], atom_map[bond[1]], from_bond_float(bond.order))
     if not parse_protein_bond:
         for residue in top.residues:
             if residue.is_protein:
@@ -99,11 +98,17 @@ def topology_from_rdkitmol(mol, res_name):
     for atom, pos in zip(atoms, positions):
         symbol = atom.GetSymbol()
         atom_counter.update(symbol)
-        newatom = top.add_atom(symbol + str(atom_counter[symbol]),
-                               element_from_symbol(symbol), res,
-                               (pos * ttk.unit.angstrom).to("nm"))
+        newatom = top.add_atom(
+            symbol + str(atom_counter[symbol]),
+            element_from_symbol(symbol),
+            res,
+            (pos * ttk.unit.angstrom).to("nm"),
+        )
         atom_map[atom.GetIdx()] = newatom
     for bond in mol.GetBonds():
-        top.add_bond(atom_map[bond.GetBeginAtomIdx()],
-                     atom_map[bond.GetEndAtomIdx()], from_rdkit_bond(bond))
+        top.add_bond(
+            atom_map[bond.GetBeginAtomIdx()],
+            atom_map[bond.GetEndAtomIdx()],
+            from_rdkit_bond(bond),
+        )
     return top

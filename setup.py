@@ -17,14 +17,17 @@ else:
     install_requires = []
     extras_require = {}
 
+
 def main():
-    setuptools.setup(name="NeoTopology",
-                     description="NeoBinder ltd(域新说) topology toolkit",
-                     packages = setuptools.find_packages(),
-                     python_requires=">=3.7",
-                     extras_require=extras_require,
-                     install_requires=install_requires,
-                     scripts=["bin/fixpdb.py"])
+    setuptools.setup(
+        name="NeoTopology",
+        description="NeoBinder ltd(域新说) topology toolkit",
+        packages=setuptools.find_packages(),
+        python_requires=">=3.7",
+        extras_require=extras_require,
+        install_requires=install_requires,
+        scripts=["bin/fixpdb.py"],
+    )
 
 
 if __name__ == "__main__":
