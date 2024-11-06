@@ -18,13 +18,13 @@ category_re = re.compile(r"(?:_(.+?)[.](\S+))")
 table_re = re.compile(r"(?:'([^']*)'|(\S+))")
 
 
-class DefinitionContainer():
+class DefinitionContainer:
 
     def __init__(self):
         self.data_type = "definition"
 
 
-class DataCategoriesContainer():
+class DataCategoriesContainer:
 
     def __init__(self, group):
         self.data_type = "data_categories"
@@ -50,7 +50,7 @@ class DataCategoriesContainer():
         return self.group
 
 
-class DataContainer():
+class DataContainer:
 
     def __init__(self, category):
         self.data_type = "data"
@@ -92,7 +92,8 @@ def process_group(chunk, current_group):
                 current_container.add_value(array)
     else:
         raise NotImplementedError(
-            "current_category {} not implemented".format(current_group))
+            "current_category {} not implemented".format(current_group)
+        )
     return current_container
 
 
@@ -115,7 +116,7 @@ def process_category(chunk):
     return current_container
 
 
-class PDBxParser():
+class PDBxParser:
 
     def __init__(self, config=None, **kwargs):
         if config is None:
@@ -129,7 +130,7 @@ class PDBxParser():
 
         self.topologies = []
         self.current_topology = None
-        self.filetype = kwargs.get('filetype', "pdbx")
+        self.filetype = kwargs.get("filetype", "pdbx")
 
     def parse_from_content(self, content):
         if isinstance(content, str):
@@ -165,12 +166,13 @@ class PDBxParser():
         if cell:
             cell_parameter = cell.data
             periodic_box = UnitCell.from_parameter(
-                a_length=cell_parameter['length_a'],
-                b_length=cell_parameter['length_b'],
-                c_length=cell_parameter['length_c'],
-                alpha=cell_parameter['angle_alpha'],
-                beta=cell_parameter['angle_beta'],
-                gamma=cell_parameter['angle_gamma'])
+                a_length=cell_parameter["length_a"],
+                b_length=cell_parameter["length_b"],
+                c_length=cell_parameter["length_c"],
+                alpha=cell_parameter["angle_alpha"],
+                beta=cell_parameter["angle_beta"],
+                gamma=cell_parameter["angle_gamma"],
+            )
 
     def parse_model(self):
         # assume 1 top per file
@@ -179,42 +181,50 @@ class PDBxParser():
         residues_map = {}
         atoms_map = {}
 
-        df = self.data_categories_dict['atom_site'].to_dataframe()
+        df = self.data_categories_dict["atom_site"].to_dataframe()
         for idx, row in df.iterrows():
-            chainid = row['label_asym_id']
+            chainid = row["label_asym_id"]
             if chainid not in chains_map:
                 chains_map[chainid] = top.add_chain(chainid)
 
-            resname = row['label_comp_id']
-            res_seq = row['label_seq_id']
-            res = top.add_residue(resname,
-                                  chains_map[chainid],
-                                  res_seq=res_seq)
-            residues_map['{}-{}'.format(chainid, res_seq)] = res
+            resname = row["label_comp_id"]
+            res_seq = row["label_seq_id"]
+            res = top.add_residue(resname, chains_map[chainid], res_seq=res_seq)
+            residues_map["{}-{}".format(chainid, res_seq)] = res
 
             is_hetero = row["group_PDB"] == "ATOM"
-            atom = top.add_atom(row['label_atom_id'],
-                                element_from_symbol(row['type_symbol']),
-                                res,
-                                position=unit.Quantity(
-                                    np.array(row['Cartn_x'], row['Cartn_y'],
-                                             row['Cartn_x']).astype(float) /
-                                    10, "nm"),
-                                index=int(idx),
-                                formal_charge=row['pdbx_formal_charge'],
-                                occupancy=row["occupancy"],
-                                is_hetero=is_hetero)
+            atom = top.add_atom(
+                row["label_atom_id"],
+                element_from_symbol(row["type_symbol"]),
+                res,
+                position=unit.Quantity(
+                    np.array(row["Cartn_x"], row["Cartn_y"], row["Cartn_x"]).astype(
+                        float
+                    )
+                    / 10,
+                    "nm",
+                ),
+                index=int(idx),
+                formal_charge=row["pdbx_formal_charge"],
+                occupancy=row["occupancy"],
+                is_hetero=is_hetero,
+            )
             atoms_map["{}-{}".format(chainid, atom.index)] = atom
 
-        for idx, row in self.data_categories_dict['struct_conn'].to_dataframe(index_name=None):
-            src_atom = atoms_map["{}-{}".format(row["ptnr1_label_asym_id"],
-                                                row["ptnr1_label_atom_id"])]
-            trg_atom = atoms_map["{}-{}".format(row["ptnr2_label_asym_id"],
-                                                row["ptnr2_label_atom_id"])]
-            top.add_bond(src_atom, trg_atom,from_bond_name(row["conn_type_id"]))
-
+        for idx, row in self.data_categories_dict["struct_conn"].to_dataframe(
+            index_name=None
+        ):
+            src_atom = atoms_map[
+                "{}-{}".format(row["ptnr1_label_asym_id"], row["ptnr1_label_atom_id"])
+            ]
+            trg_atom = atoms_map[
+                "{}-{}".format(row["ptnr2_label_asym_id"], row["ptnr2_label_atom_id"])
+            ]
+            top.add_bond(src_atom, trg_atom, from_bond_name(row["conn_type_id"]))
 
     def parse_bond_template(self):
         templates = {}
-        for idx, row in self.data_categories_dict['chem_comp_bond'].to_dataframe(index_name="comp_id"):
+        for idx, row in self.data_categories_dict["chem_comp_bond"].to_dataframe(
+            index_name="comp_id"
+        ):
             pass

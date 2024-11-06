@@ -15,13 +15,13 @@ def res2mol(res, removeHs=False, template=None):
         atom2molidx[atom] = idx
         for bond in atom.bonds:
             bonds.add(bond)
-        conf.SetAtomPosition(
-            idx, atom.get_position(ttk.unit.angstrom, magnitude=True))
+        conf.SetAtomPosition(idx, atom.get_position(ttk.unit.angstrom, magnitude=True))
 
     for bond in bonds:
         if bond.atom1 in atom2molidx and bond.atom2 in atom2molidx:
-            mol.AddBond(atom2molidx[bond.atom1], atom2molidx[bond.atom2],
-                        bond.type.to_rdkit())
+            mol.AddBond(
+                atom2molidx[bond.atom1], atom2molidx[bond.atom2], bond.type.to_rdkit()
+            )
         else:
             if bond.atom1 not in atom2molidx:
                 source = atom2molidx[bond.atom2]
@@ -36,7 +36,8 @@ def res2mol(res, removeHs=False, template=None):
             if symbol not in ttk.data._Metal:
                 idx = mol.AddAtom(Chem.Atom(symbol))
                 conf.SetAtomPosition(
-                    idx, atom.get_position(ttk.unit.angstrom, magnitude=True))
+                    idx, atom.get_position(ttk.unit.angstrom, magnitude=True)
+                )
                 mol.GetAtomWithIdx(idx).SetProp("atomLabel", "*")
                 mol.AddBond(source, idx, bond.type.to_rdkit())
     mol = mol.GetMol()

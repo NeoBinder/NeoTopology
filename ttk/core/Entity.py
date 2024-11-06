@@ -4,6 +4,7 @@ import ttk
 import numpy as np
 from ttk import unit
 
+
 class Entity(object):
 
     def __init__(self):
@@ -20,8 +21,7 @@ class Entity(object):
     @positions.setter
     def positions(self, pos):
         atoms = self.atoms
-        assert isinstance(pos, np.ndarray) or isinstance(
-            pos, ttk.unit.Quantity)
+        assert isinstance(pos, np.ndarray) or isinstance(pos, ttk.unit.Quantity)
         assert pos.shape[0] == len(atoms)
         assert pos.shape[1] == 3
 
@@ -34,10 +34,9 @@ class Entity(object):
             for idx, atom in enumerate(atoms):
                 atom.position = pos_value[idx] * ttk.unit.nanometer
 
-    def get_positions(self,
-                      heavy_atoms=False,
-                      unit=ttk.unit.nanometer,
-                      magnitude=False):
+    def get_positions(
+        self, heavy_atoms=False, unit=ttk.unit.nanometer, magnitude=False
+    ):
         if heavy_atoms:
             atoms = self.heavy_atoms
         else:
@@ -68,14 +67,16 @@ class Entity(object):
             print("coords unit not defined, use nanometer")
 
         selected_atoms = []
-        
+
         if len(coords.shape) == 1:
             dim = 1
         elif len(coords.shape) == 2:
             dim = 2
-        
+
         for atom in self.atoms:
-            dist = np.linalg.norm(atom.position.to(ttk.unit.nanometer).magnitude - coords, axis=dim - 1)
+            dist = np.linalg.norm(
+                atom.position.to(ttk.unit.nanometer).magnitude - coords, axis=dim - 1
+            )
             if dim == 2 and (dist < threshold).any():
                 selected_atoms.append(atom)
             elif dim == 1 and dist < threshold:
@@ -97,7 +98,7 @@ class Entity(object):
         for i, xa in enumerate(source_positions):
             # Loop over all samples in set XB
             for j, xb in enumerate(target_positions):
-                dist = np.sqrt(np.sum((xa - xb)**2))
+                dist = np.sqrt(np.sum((xa - xb) ** 2))
                 if dist < threshold:
                     return True
         return False

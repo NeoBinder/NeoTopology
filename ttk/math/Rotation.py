@@ -42,7 +42,7 @@ def rigid_transform_3D(A, B):
     H = Am @ np.transpose(Bm)
 
     # sanity check
-    #if linalg.matrix_rank(H) < 3:
+    # if linalg.matrix_rank(H) < 3:
     #    raise ValueError("rank of H = {}, expecting 3".format(linalg.matrix_rank(H)))
 
     # find rotation
@@ -64,7 +64,7 @@ def rigid_transform_3D(A, B):
     return matrix
 
 
-class RotationMatrix():
+class RotationMatrix:
 
     def __init__(self):
         self.matrix = np.eye(4)

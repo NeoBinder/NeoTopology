@@ -20,8 +20,7 @@ def analyseSeq(seq1, seq2):
     lens1, lens2 = len(seq1), len(seq2)
     identity_score = getSeqIdentity(seq1, seq2)
     # cos angle - sqrt(2)/2  which is cos45
-    length_diversity = abs(lens1 / math.sqrt(lens1**2 + lens2**2) -
-                           0.7071067811865475)
+    length_diversity = abs(lens1 / math.sqrt(lens1**2 + lens2**2) - 0.7071067811865475)
     return identity_score, length_diversity
 
 

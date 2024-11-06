@@ -32,9 +32,9 @@ class Chain(Entity):
         self.chain_id = chain_id
 
     def __repr__(self):
-        return "Chain {} with {} residue at {}".format(self.index,
-                                                       len(self.residues),
-                                                       hex(id(self)))
+        return "Chain {} with {} residue at {}".format(
+            self.index, len(self.residues), hex(id(self))
+        )
 
     #########################################
     # get methods
@@ -67,7 +67,7 @@ class Chain(Entity):
 
     @property
     def n_residues(self):
-        """Get the number of residues in this Chain. """
+        """Get the number of residues in this Chain."""
         return len(self.residues)
 
     @property
@@ -105,9 +105,7 @@ class Chain(Entity):
     # delete methods
     #########################################
     def delete_residues(self, target_residues):
-        self.residues = [
-            res for res in self.residues if res not in target_residues
-        ]
+        self.residues = [res for res in self.residues if res not in target_residues]
         return True
 
     #########################################
@@ -117,8 +115,7 @@ class Chain(Entity):
         filtered_residues = [res for res in self.residues if not res.is_water]
         if len(filtered_residues) < 3:
             return False
-        protein_res_num = sum(
-            [int(res.is_protein) for res in filtered_residues])
+        protein_res_num = sum([int(res.is_protein) for res in filtered_residues])
         if protein_res_num == 0:
             return False
         return protein_res_num / len(filtered_residues) > 0.9
@@ -170,13 +167,11 @@ class Chain(Entity):
         newchain = top.add_chain()
 
         for res in self.residues:
-            newres = top.add_residue(res.name,
-                                     newchain,
-                                     res_seq=res.res_seq,
-                                     segment_id=res.segment_id)
+            newres = top.add_residue(
+                res.name, newchain, res_seq=res.res_seq, segment_id=res.segment_id
+            )
             for atom in res.atoms:
-                newatom = top.add_atom(atom.name, atom.element, newres,
-                                       atom.position)
+                newatom = top.add_atom(atom.name, atom.element, newres, atom.position)
                 atom_map[atom] = newatom
         for atom in self.atoms:
             newatom = atom_map[atom]
