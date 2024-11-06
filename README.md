@@ -25,7 +25,9 @@ pip install -e ./
 ```
 
 * pypi
-to be published
+```
+pip install NeoTopology
+```
 
 ## Document
 ### NeoTopology Topology Object IO
