@@ -26,7 +26,7 @@ pip install -e ./
 
 * pypi
 ```
-pip install NeoTopology
+pip install neotopology
 ```
 
 ## Document
