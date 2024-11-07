@@ -7,16 +7,16 @@ from ttk.data import (
 )
 from ttk import unit
 
-from ttk.core.Entity import Entity
-from ttk.core.Element import element_from_symbol
-from ttk.core.Atom import Atom
-from ttk.core.Bond import (
+from ttk.core.entity import Entity
+from ttk.core.element import element_from_symbol
+from ttk.core.atom import Atom
+from ttk.core.bond import (
     Bond,
     BondType,
     from_rdkit_bond,
     from_bond_float,
     from_bond_name,
 )
-from ttk.core.Residue import Residue
-from ttk.core.Chain import Chain
-from ttk.core.UnitCell import UnitCell
+from ttk.core.residue import Residue
+from ttk.core.chain import Chain
+from ttk.core.unit_cell import UnitCell

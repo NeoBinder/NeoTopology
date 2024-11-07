@@ -5,4 +5,4 @@ from pint import UnitRegistry
 
 unit = UnitRegistry()
 
-from .Topology import Topology
+from .topology import Topology

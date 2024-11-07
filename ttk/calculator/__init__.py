@@ -1,5 +1,4 @@
 import numpy as np
-from .Rotation import RotationMatrix
 from .dimer import find_interface
 
 
