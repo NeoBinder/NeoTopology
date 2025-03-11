@@ -1,10 +1,8 @@
 from mendeleev import element as mendeleev_element
-from mendeleev import Element
 import ttk
 
 
 class UnknownElement:
-
     def __init__(self):
         self.symbol = "X"
 
@@ -14,9 +12,6 @@ class UnknownElement:
 
 
 symbol_element_dict = {"X": UnknownElement()}
-
-
-__all__ = ["Element"]
 
 
 def element_from_symbol(symbol):

@@ -1,12 +1,10 @@
 import numbers
-from .utils import atom_types_dict, filter_atom_types, to_unitless
+from .utils import filter_atom_types, to_unitless
 import ttk
 import numpy as np
-from ttk import unit
 
 
 class Entity(object):
-
     def __init__(self):
         self.atoms = []
         pass

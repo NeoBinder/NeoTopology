@@ -43,7 +43,6 @@ def parameters_to_box_matrix(a_length, b_length, c_length, alpha, beta, gamma):
 
 
 class UnitCell:
-
     def __init__(self, matrix):
         self.matrix = matrix
 

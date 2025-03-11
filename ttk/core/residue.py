@@ -1,5 +1,3 @@
-import numpy as np
-
 from ttk.core import (
     _AMINO_ACID_CODES,
     _PROTEIN_RESIDUES,
