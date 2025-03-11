@@ -12,6 +12,17 @@ This Package contains:
 ## Installation
 NeoTopology can be installed with:
 
+* uv (recommended)
+1. Install [uv](https://docs.astral.sh/uv/getting-started/installation/)
+2. Install package
+```bash
+git clone git@github.com:NeoBinder/NeoTopology.git
+cd NeoTopology
+uv venv -p 3.11
+source ./.venv/bin/activate
+uv sync
+```
+
 * source code installation
 ```bash
 mkdir -p /path/to/project
