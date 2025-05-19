@@ -11,8 +11,10 @@ dynamic = ["version"]
 readme = "README.md"
 requires-python = ">=3.7"
 dependencies = [
-"mendeleev",
-"pint"
+  "mendeleev",
+  "pint",
+  "rdkit",
+  "numpy"
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -24,6 +26,9 @@ classifiers = [
 [tool.setuptools.dynamic]
 version = {attr = "ttk.__version__"}
 
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [project.urls]
 Homepage = "https://github.com/NeoBinder/NeoTopology"
