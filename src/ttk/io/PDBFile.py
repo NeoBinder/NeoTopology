@@ -10,7 +10,6 @@ from .PDBUtil import parse_pdb_header_list, split_pdb_content
 
 
 class PDBParser:
-
     def __init__(self, config=None, **kwargs):
         if config is None:
             self.config = {}
@@ -66,9 +65,7 @@ class PDBParser:
             or current_residue.name != resname
             or current_residue.res_seq != resseq
         ):
-            current_residue = self._current_topology.add_residue(
-                resname, chain, res_seq=resseq
-            )
+            current_residue = self._current_topology.add_residue(resname, chain, res_seq=resseq)
             self._parse_dict["current_residue"] = current_residue
         return current_residue
 
@@ -125,6 +122,9 @@ class PDBParser:
         )
 
     def parse_bonds(self, bonds):
+        if len(self.topologies) == 0:
+            return  # 没有 topology，无法解析键
+
         top = self.topologies[-1]
         atom_maps = {atom.index: atom for atom in top.atoms}
         bond_dict = {}
@@ -134,9 +134,7 @@ class PDBParser:
             ).split()
             bond = list(map(int, bond))
             if len(bond) > 1:
-                bond_dict[bond[0]] = Counter(bond[1:]) + bond_dict.get(
-                    bond[0], Counter()
-                )
+                bond_dict[bond[0]] = Counter(bond[1:]) + bond_dict.get(bond[0], Counter())
 
         for source_atom_idx, atom_bond_dict in bond_dict.items():
             for target_atom_idx, bond_order in atom_bond_dict.items():
@@ -282,9 +280,7 @@ class PDBFile:
                     elif len(atom.name) == 4:
                         desc += "{:<4} ".format(atom.name)
                     else:
-                        raise Exception(
-                            "atom name '{}' is longger than 4 !!".format(atom.name)
-                        )
+                        raise Exception("atom name '{}' is longger than 4 !!".format(atom.name))
                     if len(res.name) > 3:
                         resname = res.name[:3]
                     else:
@@ -305,9 +301,7 @@ class PDBFile:
                     desc += atom.symbol.rjust(2, " ")
                     content += desc + "\n"
             index += 1
-            desc = "TER   {:>5}      {} {} {:>3}\n".format(
-                index, resname, chain.id, res.res_seq
-            )
+            desc = "TER   {:>5}      {} {} {:>3}\n".format(index, resname, chain.id, res.res_seq)
             content += desc
         return content
 

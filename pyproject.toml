@@ -9,12 +9,13 @@ authors = [
 ]
 dynamic = ["version"]
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.11"
 dependencies = [
   "mendeleev",
   "pint",
   "rdkit",
-  "numpy"
+  "numpy",
+  "pytest>=7.4.4",
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -33,3 +34,89 @@ where = ["src"]
 [project.urls]
 Homepage = "https://github.com/NeoBinder/NeoTopology"
 Issues = "https://github.com/NeoBinder/NeoTopology/issues"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0",
+]
+
+[tool.ruff]
+# 指定目标 Python 版本
+target-version = "py311"
+
+# 每行最大字符数
+line-length = 100
+
+# 启用的规则集
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # pyflakes
+    "I",      # isort
+    "B",      # flake8-bugbear
+    "C4",     # flake8-comprehensions
+    "UP",     # pyupgrade
+    "ARG",    # flake8-unused-arguments
+    "SIM",    # flake8-simplify
+]
+
+# 排除的文件
+exclude = [
+    ".git",
+    "__pycache__",
+    ".venv",
+    "venv",
+    "build",
+    "dist",
+]
+
+# 排除的规则
+ignore = [
+    "E501",   # 行太长（由 line-length 处理）
+    "B008",   # 函数调用中使用默认可变参数
+    "ARG001", # 未使用的函数参数
+    "SIM108", # 使用三元运算符（可能降低可读性）
+]
+
+[tool.ruff.isort]
+known-first-party = ["ttk"]
+
+[tool.ruff.per-file-ignores]
+# 测试文件可以有一些特殊的规则
+"tests/*" = ["S101"]  # 允许使用 assert
+
+[tool.mypy]
+# 指定目标 Python 版本
+python_version = "3.11"
+
+# 报告未使用的导入
+warn_unused_ignores = true
+
+# 排除的文件
+exclude = [
+    "venv",
+    ".venv",
+    "build",
+    "dist",
+]
+
+# 严格性选项
+strict = false
+warn_return_any = true
+warn_unused_configs = true
+
+# 禁用特定的错误检查
+[[tool.mypy.overrides]]
+module = "mendeleev.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "rdkit.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "openmm.*"
+ignore_missing_imports = true

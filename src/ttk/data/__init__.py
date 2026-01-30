@@ -185,6 +185,7 @@ NameUpperToSymbol = {
 _SIMPLE_SOLVENT = frozenset(
     [
         "CL",
+        "NA",
         "NA+",
         "NA2+",
         "H2O",

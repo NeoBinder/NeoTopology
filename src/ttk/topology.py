@@ -16,7 +16,6 @@ def expand_symmetry(top):
 
 
 class Topology(Entity):
-
     def __init__(self):
         self.chains = []
         self.periodic_box = None
@@ -98,9 +97,7 @@ class Topology(Entity):
     #########################################
     # add operation
     #########################################
-    def add_atom(
-        self, name, element, residue, is_hetero, position=None, index=0, **kwargs
-    ):
+    def add_atom(self, name, element, residue, is_hetero, position=None, index=0, **kwargs):
         """Create a new Atom and add it to the Topology.
         Parameters
         ----------
@@ -136,13 +133,14 @@ class Topology(Entity):
         bond = Bond(atom1, atom2, bondtype=bondtype)
         if bond.connection_hash not in atom1.bonds_dict:
             atom1.bonds_dict[bond.connection_hash] = bond
-        if bond.connection_hash not in atom1.bonds_dict:
+        if bond.connection_hash not in atom2.bonds_dict:
             atom2.bonds_dict[bond.connection_hash] = bond
         return bond
 
     def add_chain(self, chain_id=None):
         if chain_id is None:
             exist_ids = set([c.id for c in self.chains])
+            # _PROTEIN_LETTERS is frozenset
             for p_id in _PROTEIN_LETTERS:
                 if p_id not in exist_ids:
                     chain_id = p_id

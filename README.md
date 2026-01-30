@@ -99,3 +99,71 @@ from ttk.calculators import get_center_of_mass
 res = top.get_residues_by_name(res_name)
 com = get_center_of_mass(res.atoms)
 ```
+
+### 查找二聚体接口
+```python
+from ttk.calculator.dimer import find_interface
+
+# 获取两个链之间的接口残基
+chain1, chain2 = top.chains[0], top.chains[1]
+chain1_interface, chain2_interface = find_interface(chain1, chain2, threshold=0.3)
+
+print(f"Chain 1 interface residues: {len(chain1_interface)}")
+print(f"Chain 2 interface residues: {len(chain2_interface)}")
+```
+
+### 计算键角和二面角
+```python
+from ttk.math.vector import angle_between, calc_dihedral
+import ttk.unit as unit
+
+# 计算两个向量之间的角度
+import numpy as np
+v1 = np.array([1.0, 0.0, 0.0])
+v2 = np.array([0.0, 1.0, 0.0])
+angle = angle_between(v1, v2)
+print(f"Angle: {angle} radians ({angle * 180 / np.pi} degrees)")
+
+# 计算二面角（例如蛋白质主链二面角）
+p0 = np.array([0.0, 0.0, 0.0])
+p1 = np.array([1.0, 0.0, 0.0])
+p2 = np.array([2.0, 1.0, 0.0])
+p3 = np.array([3.0, 1.0, 1.0])
+dihedral = calc_dihedral(p0, p1, p2, p3)
+print(f"Dihedral angle: {dihedral} radians ({dihedral * 180 / np.pi} degrees)")
+```
+
+### 删除溶剂和水分子
+```python
+# 只删除水分子
+top.remove_water()
+print(f"After removing water: {top.n_residues} residues")
+
+# 删除所有溶剂（包括离子等）
+top.remove_solvent()
+print(f"After removing solvent: {top.n_residues} residues")
+```
+
+### 按名称获取残基
+```python
+# 获取单个残基名称
+ala_residues = list(top.get_residues_by_name("ALA"))
+print(f"Found {len(ala_residues)} ALA residues")
+
+# 获取多个残基名称
+protein_residues = list(top.get_residues_by_name(["ALA", "GLY", "VAL"]))
+print(f"Found {len(protein_residues)} protein residues")
+```
+
+### 创建和索引拓扑
+```python
+# 为所有原子和残基创建索引
+top.create_index()
+
+# 检查索引是否正确
+for atom in top.atoms:
+    print(f"Atom {atom.name} has index {atom.index}")
+
+for residue in top.residues:
+    print(f"Residue {residue.name} has index {residue.index}")
+```

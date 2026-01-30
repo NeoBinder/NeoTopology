@@ -9,9 +9,7 @@ from ttk.core import UnitCell, element_from_symbol, from_bond_float, from_rdkit_
 from ttk.io import PDBParser, PDBxParser
 
 
-def topology_from_openmmm(
-    mm_topology, positions=None, keepIdx=True, parse_protein_bond=True
-):
+def topology_from_openmmm(mm_topology, positions=None, keepIdx=True, parse_protein_bond=True):
     import openmm
 
     top = Topology()
@@ -65,6 +63,9 @@ def load_from_file(path):
 def topology_from_pdb_content(content, **kwargs):
     parser = PDBParser(**kwargs)
     parser.load_from_content_list(content)
+    # 如果没有解析到任何 topology，返回一个空的
+    if len(parser.topologies) == 0:
+        return ttk.Topology()
     top = parser.topologies[-1]
     return top
 
@@ -92,6 +93,11 @@ def topology_from_rdkitmol(mol, res_name):
     atom_counter = Counter()
 
     atoms = mol.GetAtoms()
+    # 如果分子没有 conformer，添加一个默认的
+    if mol.GetNumConformers() == 0:
+        from rdkit.Chem import AllChem
+
+        AllChem.Compute2DCoords(mol)
     positions = mol.GetConformer().GetPositions()
     atom_map = {}
 

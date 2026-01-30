@@ -2,13 +2,12 @@ import hashlib
 
 
 class BondType(object):
-
     def __init__(self, name, order):
         self.name = name
         self.order = order
 
     def __float__(self):
-        return self.order
+        return float(self.order)
 
     def __repr__(self):
         return "BondType:{} at {}".format(self.name, hex(id(self)))

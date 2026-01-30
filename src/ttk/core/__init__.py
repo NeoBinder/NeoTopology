@@ -13,6 +13,12 @@ from ttk.core.atom import Atom
 from ttk.core.bond import (
     Bond,
     BondType,
+    BondTypeUnknown,
+    Single as BondTypeSingle,
+    Double as BondTypeDouble,
+    Triple as BondTypeTriple,
+    Aromatic as BondTypeAromatic,
+    Amide as BondTypeAmide,
     from_rdkit_bond,
     from_bond_float,
     from_bond_name,

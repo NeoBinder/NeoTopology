@@ -15,7 +15,6 @@ def apply_matrix_2d(vecs, matrix):
     vecs = matrix.dot(vecs.T).T
     return vecs[:, :vecs_dim]
 
-
 def rigid_transform_3D(A, B):
     assert A.shape == B.shape
 
@@ -27,7 +26,7 @@ def rigid_transform_3D(A, B):
     if num_rows != 3:
         raise Exception(f"matrix B is not 3xN, it is {num_rows}x{num_cols}")
 
-    # find mean column wise
+    # find mean row wise (每个坐标维度求均值）
     centroid_A = np.mean(A, axis=1)
     centroid_B = np.mean(B, axis=1)
 
@@ -65,7 +64,6 @@ def rigid_transform_3D(A, B):
 
 
 class RotationMatrix:
-
     def __init__(self):
         self.matrix = np.eye(4)
 
@@ -79,8 +77,10 @@ class RotationMatrix:
         rmatrix = cls()
         if matrix.shape[0] == 3 and matrix.shape[1] == 3:
             rmatrix.matrix[:3, :3] = matrix
-        if matrix.shape[0] == 3 and matrix.shape[1] == 4:
+            rmatrix.matrix[3, 3] = 1  # 设置右下角为 1
+        elif matrix.shape[0] == 3 and matrix.shape[1] == 4:
             rmatrix.matrix[:3] = matrix
+            rmatrix.matrix[3, 3] = 1  # 确保右下角为 1
         else:
             rmatrix.matrix = matrix
         return rmatrix
