@@ -32,9 +32,7 @@ def have_interface_ligands(
             return False
         return True
 
-    filtered_ligands = list(
-        filter(lambda x: filter_ligand(x, mass_threshold), topology.residues)
-    )
+    filtered_ligands = list(filter(lambda x: filter_ligand(x, mass_threshold), topology.residues))
     if len(filtered_ligands) == 0:
         return False
     filtered_chains = [
@@ -47,7 +45,7 @@ def have_interface_ligands(
         # print("{} is not dimer".format(pdbid))
         return False
     for ligand in filtered_ligands:
-        if filtered_chains[0].is_close(ligand, distance_threshold) and filtered_chains[
-            1
-        ].is_close(ligand, distance_threshold):
+        if filtered_chains[0].is_close(ligand, distance_threshold) and filtered_chains[1].is_close(
+            ligand, distance_threshold
+        ):
             return True

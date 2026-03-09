@@ -65,9 +65,7 @@ def topology_to_openmm(ttk_topology):
                 )
                 newAtoms[hash(atom)] = newAtom
                 # newPositions.append(atom.position * nanometer)
-                newPositions.append(
-                    atom.position.to(ttk.unit.nanometer).magnitude * nanometer
-                )
+                newPositions.append(atom.position.to(ttk.unit.nanometer).magnitude * nanometer)
     for bond in ttk_topology.get_bonds():
         newTopology.addBond(newAtoms[hash(bond.atom1)], newAtoms[hash(bond.atom2)])
     return newTopology, newPositions

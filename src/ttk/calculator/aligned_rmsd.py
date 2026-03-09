@@ -17,18 +17,16 @@ def get_pocket(top, threshold):
         for atom in top.atoms
         if (atom.residue.is_protein is False) and (atom.residue.is_water is False)
     ]
-    print("Found a total of {} hetatms".format(len(hetatms)))
+    print(f"Found a total of {len(hetatms)} hetatms")
 
     # select by distance
     atoms = []
     for atm in hetatms:
         # coord = atm.position.magnitude
-        atoms.extend(
-            top.select_by_dist(atm.position, threshold * ttk.unit.angstrom, "heavy")
-        )
+        atoms.extend(top.select_by_dist(atm.position, threshold * ttk.unit.angstrom, "heavy"))
 
     residues = set([atom.residue.res_seq for atom in atoms if atom.residue.is_protein])
-    print("Found a total of {} residues".format(len(residues)))
+    print(f"Found a total of {len(residues)} residues")
     print(residues)
     return residues
 
@@ -54,13 +52,9 @@ def calculate_pocket_rmsd(top, align_res_dict, selections):
 
     rmsd_ca = {}
     for i, t_res in enumerate(selected_t_res):
-        t_ca = (
-            list(t_res.atoms_by_name("CA"))[0].position.to(ttk.unit.angstrom).magnitude
-        )
+        t_ca = list(t_res.atoms_by_name("CA"))[0].position.to(ttk.unit.angstrom).magnitude
         s_ca = (
-            list(selected_s_res[i].atoms_by_name("CA"))[0]
-            .position.to(ttk.unit.angstrom)
-            .magnitude
+            list(selected_s_res[i].atoms_by_name("CA"))[0].position.to(ttk.unit.angstrom).magnitude
         )
         rmsd_ca[t_res.res_seq] = np.linalg.norm(t_ca - s_ca)
 
@@ -72,12 +66,9 @@ def calculate_pocket_rmsd(top, align_res_dict, selections):
             print("Warning: residues do not match")
             continue
         same_res.append(t_res.res_seq)
-        t_atoms = [
-            atom.position.to(ttk.unit.angstrom).magnitude for atom in t_res.atoms
-        ]
+        t_atoms = [atom.position.to(ttk.unit.angstrom).magnitude for atom in t_res.atoms]
         s_atoms = [
-            atom.position.to(ttk.unit.angstrom).magnitude
-            for atom in selected_s_res[i].atoms
+            atom.position.to(ttk.unit.angstrom).magnitude for atom in selected_s_res[i].atoms
         ]
         rmsd_aa[t_res.res_seq] = np.linalg.norm(np.array(t_atoms) - np.array(s_atoms))
     print("Same residues: ", same_res)
@@ -89,7 +80,7 @@ def get_alignment_from_local(localf):
     """
     return target idx: (target residue, source index, source residue)
     """
-    with open(localf, "r") as f:
+    with open(localf) as f:
         lines = f.readlines()
 
     target, source = [], []
@@ -121,9 +112,7 @@ def get_alignment_from_local(localf):
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
-    p.add_argument(
-        "-alignfile", type=str, required=True, help="deepalign output prefix"
-    )
+    p.add_argument("-alignfile", type=str, required=True, help="deepalign output prefix")
     p.add_argument(
         "-pocket_threshold",
         type=float,
@@ -153,14 +142,10 @@ if __name__ == "__main__":
     # load aligned structure
     aligned_top = topology_parser.topology_from_pdb(args.alignfile + ".pdb")
 
-    rmsd_ca, rmsd_aa = calculate_pocket_rmsd(
-        aligned_top, align_res_dict, pocket_residues
-    )
+    rmsd_ca, rmsd_aa = calculate_pocket_rmsd(aligned_top, align_res_dict, pocket_residues)
 
     print("=======Pocket stats=======")
-    print("Mean RMSD between carbon alpha: {}".format(np.mean(list(rmsd_ca.values()))))
+    print(f"Mean RMSD between carbon alpha: {np.mean(list(rmsd_ca.values()))}")
     print(
-        "Mean RMSD between all atoms (matched same residues only): {}".format(
-            np.mean(list(rmsd_aa.values()))
-        )
+        f"Mean RMSD between all atoms (matched same residues only): {np.mean(list(rmsd_aa.values()))}"
     )

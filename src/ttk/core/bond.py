@@ -1,7 +1,7 @@
 import hashlib
 
 
-class BondType(object):
+class BondType:
     def __init__(self, name, order):
         self.name = name
         self.order = order
@@ -10,7 +10,7 @@ class BondType(object):
         return float(self.order)
 
     def __repr__(self):
-        return "BondType:{} at {}".format(self.name, hex(id(self)))
+        return f"BondType:{self.name} at {hex(id(self))}"
 
     def __eq__(self, bondtype):
         return self.name == bondtype.name or self.order == bondtype.order
@@ -140,11 +140,11 @@ class Bond:
         return False
 
     def __repr__(self):
-        output = "Bond({}, {}".format(self.atom1, self.atom2)
+        output = f"Bond({self.atom1}, {self.atom2}"
         if self.type is not None:
-            output += ", type={}".format(self.type)
+            output += f", type={self.type}"
         output += ")"
-        output += "at {}".format(hex(id(self)))
+        output += f"at {hex(id(self))}"
         return output
 
     def connect(self, atom):

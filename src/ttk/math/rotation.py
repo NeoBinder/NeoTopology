@@ -15,6 +15,7 @@ def apply_matrix_2d(vecs, matrix):
     vecs = matrix.dot(vecs.T).T
     return vecs[:, :vecs_dim]
 
+
 def rigid_transform_3D(A, B):
     assert A.shape == B.shape
 
