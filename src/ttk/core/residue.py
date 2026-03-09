@@ -38,7 +38,7 @@ class Residue(Entity):
         return "%s-%s" % (self.name, self.res_seq)
 
     def __repr__(self):
-        return "Residue:{} at {}".format(str(self), hex(id(self)))
+        return f"Residue:{str(self)} at {hex(id(self))}"
 
     def __getitem__(self, key):
         for atom in self.atoms:

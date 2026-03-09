@@ -6,7 +6,7 @@ import numpy as np
 import ttk
 from ttk import Topology
 from ttk.core import UnitCell, element_from_symbol, from_bond_float, from_rdkit_bond
-from ttk.io import PDBParser, PDBxParser
+from ttk.io import PDBParser
 
 
 def topology_from_openmmm(mm_topology, positions=None, keepIdx=True, parse_protein_bond=True):
@@ -55,7 +55,7 @@ def load_from_file(path):
         with gzip.open(path, "rb") as f:
             content = f.read().decode().split("\n")
     else:
-        with open(path, "r") as f:
+        with open(path) as f:
             content = f.readlines()
     return content
 

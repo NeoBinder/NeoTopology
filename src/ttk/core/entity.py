@@ -1,10 +1,13 @@
 import numbers
-from .utils import filter_atom_types, to_unitless
-import ttk
+
 import numpy as np
 
+import ttk
 
-class Entity(object):
+from .utils import filter_atom_types, to_unitless
+
+
+class Entity:
     def __init__(self):
         self.atoms = []
         pass
@@ -32,9 +35,7 @@ class Entity(object):
             for idx, atom in enumerate(atoms):
                 atom.position = pos_value[idx] * ttk.unit.nanometer
 
-    def get_positions(
-        self, heavy_atoms=False, unit=ttk.unit.nanometer, magnitude=False
-    ):
+    def get_positions(self, heavy_atoms=False, unit=ttk.unit.nanometer, magnitude=False):
         if heavy_atoms:
             atoms = self.heavy_atoms
         else:
@@ -75,9 +76,7 @@ class Entity(object):
             dist = np.linalg.norm(
                 atom.position.to(ttk.unit.nanometer).magnitude - coords, axis=dim - 1
             )
-            if dim == 2 and (dist < threshold).any():
-                selected_atoms.append(atom)
-            elif dim == 1 and dist < threshold:
+            if dim == 2 and (dist < threshold).any() or dim == 1 and dist < threshold:
                 selected_atoms.append(atom)
 
         selected_atoms = filter_atom_types(selected_atoms, atom_type)

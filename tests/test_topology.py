@@ -1,8 +1,9 @@
 """测试 ttk.topology 模块"""
 
 import pytest
+
+from ttk.core import element_from_symbol
 from ttk.topology import Topology, expand_symmetry
-from ttk.core import element_from_symbol, Atom, Bond, Chain, Residue
 
 
 class TestTopologyInit:
