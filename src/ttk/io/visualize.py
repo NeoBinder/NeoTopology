@@ -226,8 +226,7 @@ def visualise_topology(topology, show_interface=False):
 
 def visualise_pdb(pdb_fpath):
     view = py3Dmol.view(width=500, height=500)
-    with open(pdb_fpath) as f:
-        view.addModel(f.read(), "pdb")
+    view.addModel(open(pdb_fpath).read(), "pdb")
 
     view.setHoverable(
         {},

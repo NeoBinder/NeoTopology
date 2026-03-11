@@ -22,6 +22,6 @@ def element_from_symbol(symbol):
             element = mendeleev_element(symbol)
         except Exception:
             print(symbol)
-            raise KeyError(f"symbol not found {symbol}") from None
+            raise KeyError(f"symbol not found {symbol}")
         symbol_element_dict[symbol] = element
     return symbol_element_dict[symbol]
