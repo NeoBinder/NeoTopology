@@ -25,7 +25,7 @@ def get_pocket(top, threshold):
         # coord = atm.position.magnitude
         atoms.extend(top.select_by_dist(atm.position, threshold * ttk.unit.angstrom, "heavy"))
 
-    residues = set([atom.residue.res_seq for atom in atoms if atom.residue.is_protein])
+    residues = {atom.residue.res_seq for atom in atoms if atom.residue.is_protein}
     print(f"Found a total of {len(residues)} residues")
     print(residues)
     return residues
@@ -37,10 +37,9 @@ def calculate_pocket_rmsd(top, align_res_dict, selections):
     selected_s_res = []
     s_selections = []
     for t_res in t_chain.residues:
-        if t_res.res_seq in selections:
-            if align_res_dict[t_res.res_seq][2] != "-":
-                selected_t_res.append(t_res)
-                s_selections.append(align_res_dict[t_res.res_seq][1])
+        if t_res.res_seq in selections and align_res_dict[t_res.res_seq][2] != "-":
+            selected_t_res.append(t_res)
+            s_selections.append(align_res_dict[t_res.res_seq][1])
 
     s_res_dict = {}
     for s_res in s_chain.residues:
@@ -93,7 +92,7 @@ def get_alignment_from_local(localf):
             source.append(line)
 
     align_res_dict = {}
-    for t, s in zip(target, source):
+    for t, s in zip(target, source, strict=False):
         seq_t = t.split()[3]
         seq_s = s.split()[3]
         assert len(seq_t) == len(seq_s)

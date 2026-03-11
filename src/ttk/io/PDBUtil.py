@@ -26,16 +26,16 @@ def get_references(inl):
     # REMARK   1  AUTH   W.BODE,E.PAPAMOKOS,D.MUSIL                           1CSE  12
     references = []
     actref = ""
-    for l in inl:
-        if re.search(r"\AREMARK   1", l):
-            if re.search(r"\AREMARK   1 REFERENCE", l):
+    for line in inl:
+        if re.search(r"\AREMARK   1", line):
+            if re.search(r"\AREMARK   1 REFERENCE", line):
                 if actref != "":
                     actref = re.sub(r"\s\s+", " ", actref)
                     if actref != " ":
                         references.append(actref)
                     actref = ""
             else:
-                actref += l[19:72].lower()
+                actref += line[19:72].lower()
 
     if actref != "":
         actref = re.sub(r"\s\s+", " ", actref)
@@ -61,9 +61,9 @@ def get_symmetry_matrices(header):
 def get_journal(inl):
     # JRNL        AUTH   L.CHEN,M.DOI,F.S.MATHEWS,A.Y.CHISTOSERDOV,           2BBK   7
     journal = ""
-    for l in inl:
-        if re.search(r"\AJRNL", l):
-            journal += l[19:72].lower()
+    for line in inl:
+        if re.search(r"\AJRNL", line):
+            journal += line[19:72].lower()
     journal = re.sub(r"\s\s+", " ", journal)
     return journal
 
@@ -308,7 +308,7 @@ def parse_pdb_header_list(header):
             elif hh.startswith("REMARK  99 ASTRAL"):
                 if tail:
                     remark_99_keyval = tail.replace("ASTRAL ", "").split(": ")
-                    if type(remark_99_keyval) == list and len(remark_99_keyval) == 2:
+                    if isinstance(remark_99_keyval, list) and len(remark_99_keyval) == 2:
                         if "astral" not in pdbh_dict:
                             pdbh_dict["astral"] = {remark_99_keyval[0]: remark_99_keyval[1]}
                         else:

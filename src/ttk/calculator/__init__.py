@@ -1,6 +1,6 @@
 import numpy as np
 
-from .dimer import find_interface
+from .dimer import find_interface as find_interface
 
 
 def get_center_of_mass(atoms):

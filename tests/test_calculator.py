@@ -194,7 +194,7 @@ class TestHaveInterfaceLigands:
 
         # 创建只有蛋白质链的拓扑
         chain1 = topo.add_chain("A")
-        res1 = topo.add_residue("ALA", chain1)
+        topo.add_residue("ALA", chain1)
         for i in range(100):  # 长链
             res = topo.add_residue("ALA", chain1)
             topo.add_atom(
@@ -263,7 +263,7 @@ class TestHaveInterfaceLigands:
         # 测试会检查配体是否接近两个链
         # 这个测试可能需要调整参数才能通过
         try:
-            result = have_interface_ligands(topo)
+            have_interface_ligands(topo)
             # 如果函数正确实现，可能会返回 True
             # 但由于实现细节，可能需要更精确的设置
         except Exception as e:

@@ -7,7 +7,7 @@ from ttk.data import _PROTEIN_LETTERS
 def expand_symmetry(top):
     newtop = Topology()
     symmetry_matrices = top.symmetry
-    for k, rmatrix in symmetry_matrices.items():
+    for _k, rmatrix in symmetry_matrices.items():
         current_top = copy.deepcopy(top)
         positions = current_top.positions
         current_top.positions = rmatrix.apply(positions.magnitude) * positions.units
@@ -64,16 +64,14 @@ class Topology(Entity):
 
     def get_residues(self):
         for chain in self.chains:
-            for res in chain.residues:
-                yield res
+            yield from chain.residues
 
     def get_atoms(self, create_index=False):
         if create_index:
             self.create_index()
         for chain in self.chains:
             for res in chain.residues:
-                for atom in res.atoms:
-                    yield atom
+                yield from res.atoms
 
     def get_bonds(self):
         bonds = set()
@@ -87,7 +85,7 @@ class Topology(Entity):
 
     def get_residues_by_name(self, name_set):
         if isinstance(name_set, str):
-            name_set = set([name_set])
+            name_set = {name_set}
         if isinstance(name_set, list):
             name_set = set(name_set)
         for residue in self.get_residues():
@@ -139,9 +137,9 @@ class Topology(Entity):
 
     def add_chain(self, chain_id=None):
         if chain_id is None:
-            exist_ids = set([c.id for c in self.chains])
+            exist_ids = {c.id for c in self.chains}
             # _PROTEIN_LETTERS is frozenset
-            for p_id in _PROTEIN_LETTERS:
+            for p_id in sorted(_PROTEIN_LETTERS):
                 if p_id not in exist_ids:
                     chain_id = p_id
                     break

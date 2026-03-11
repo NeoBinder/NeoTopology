@@ -185,12 +185,12 @@ class TestTopologyAddOperations:
         topo1 = Topology()
         chain1 = topo1.add_chain()
         res1 = topo1.add_residue("ALA", chain1)
-        atom1 = topo1.add_atom("CA", element_from_symbol("C"), res1, is_hetero=False)
+        topo1.add_atom("CA", element_from_symbol("C"), res1, is_hetero=False)
 
         topo2 = Topology()
         chain2 = topo2.add_chain()
         res2 = topo2.add_residue("GLY", chain2)
-        atom2 = topo2.add_atom("CA", element_from_symbol("C"), res2, is_hetero=False)
+        topo2.add_atom("CA", element_from_symbol("C"), res2, is_hetero=False)
 
         # 合并前
         assert topo1.n_chains == 1
@@ -312,7 +312,7 @@ class TestTopologyGetOperations:
         res2 = topo.add_residue("GLY", chain)
         res3 = topo.add_residue("VAL", chain)
 
-        residues = list(topo.get_residues_by_name(set(["ALA", "GLY"])))
+        residues = list(topo.get_residues_by_name({"ALA", "GLY"}))
         assert len(residues) == 2
         assert res1 in residues
         assert res2 in residues
@@ -324,7 +324,7 @@ class TestTopologyGetOperations:
         chain = topo.add_chain()
 
         res1 = topo.add_residue("ALA", chain)
-        res2 = topo.add_residue("GLY", chain)
+        topo.add_residue("GLY", chain)
 
         residues = list(topo.get_residues_by_name(["ALA"]))
         assert len(residues) == 1

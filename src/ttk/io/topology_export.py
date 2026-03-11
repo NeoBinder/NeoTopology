@@ -12,7 +12,7 @@ def topology_from_indices(topology, indices, start_idx=1):
     for chain in topology.chains:
         c = top.add_chain(chain.id)
         for residue in chain.residues:
-            residue_atom_indices = set([atom.index for atom in residue.atoms])
+            residue_atom_indices = {atom.index for atom in residue.atoms}
             intersection = residue_atom_indices.intersection(indices_set)
             if len(intersection) == 0:
                 continue

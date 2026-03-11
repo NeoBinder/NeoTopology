@@ -274,7 +274,7 @@ class TestBond:
 
         bond = Bond(atom1, atom2)
 
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError):
             bond.connect(atom3)
 
 

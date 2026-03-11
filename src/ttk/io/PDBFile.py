@@ -77,30 +77,30 @@ class PDBParser:
         if len(split_list) != 1:
             # atom name has internal spaces, e.g. " N B ", so
             # we do not strip spaces
-            name = fullname
+            pass
         else:
             # atom name is like " CA ", so we can strip spaces
-            name = split_list[0]
-        altloc = line[16]
+            split_list[0]
+        line[16]
         try:
             serial_number = int(line[6:11])
         except Exception:
             serial_number = 0
-        icode = line[26]  # insertion code
+        line[26]  # insertion code
         x = float(line[30:38])
         y = float(line[38:46])
         z = float(line[46:54])
         try:
             occupancy = float(line[54:60])
-        except:
+        except Exception:
             occupancy = 1.0
         try:
             temperature_factor = float(line[60:66])
-        except:
+        except Exception:
             temperature_factor = 0.0
         element_symbol = line[76:78].strip()
         if element_symbol == self.config.get("extraParticleIdentifier", "EP"):
-            element = "EP"
+            pass
         else:
             atom_element = element_from_symbol(element_symbol)
         try:
@@ -164,7 +164,7 @@ class PDBParser:
                 resseq = int(line[22:26].split()[0])  # sequence identifier
                 current_residue = self.parse_residue(resname, current_chain, resseq)
                 # atom name,element,residue,position
-                current_atom = self.parse_atom(line, current_residue)
+                self.parse_atom(line, current_residue)
 
             elif record_type == "TER":
                 self._parse_dict = {}
@@ -313,7 +313,7 @@ class PDBFile:
                 continue
             bond_atoms.append(atom)
         for atom in bond_atoms:
-            bonds = [bond for bond in atom.bonds]
+            bonds = list(atom.bonds)
             idx = 0
             desc = ""
             while len(bonds):

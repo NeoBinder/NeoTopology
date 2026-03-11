@@ -232,8 +232,10 @@ class TestTopologyFromOpenMM:
     def test_topology_from_openmmm_basic(self):
         """测试从 OpenMM 加载"""
         try:
-            import openmm
-            from openmm.app import Modeller
+            import importlib.util
+
+            if importlib.util.find_spec("openmm") is None:
+                pytest.skip("openmm not installed")
         except ImportError:
             pytest.skip("openmm not installed")
 
@@ -265,8 +267,10 @@ END
     def test_topology_from_openmmm_without_positions(self):
         """测试从 OpenMM 加载不带位置"""
         try:
-            import openmm
-            from openmm.app import Modeller
+            import importlib.util
+
+            if importlib.util.find_spec("openmm") is None:
+                pytest.skip("openmm not installed")
         except ImportError:
             pytest.skip("openmm not installed")
 

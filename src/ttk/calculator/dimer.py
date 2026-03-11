@@ -10,16 +10,18 @@ def find_interface(chain1, chain2, threshold=0.3):
     c2_interface_residues = set()
     c2_interface_residues_index = set()
     for atom in chain1.atoms:
-        if (np.linalg.norm(pos_c2 - atom.position.magnitude, axis=1) < threshold).any():
-            if atom.residue.index not in c1_interface_residues_index:
-                c1_interface_residues_index.add(atom.residue.index)
-                c1_interface_residues.add(atom.residue)
+        if (
+            np.linalg.norm(pos_c2 - atom.position.magnitude, axis=1) < threshold
+        ).any() and atom.residue.index not in c1_interface_residues_index:
+            c1_interface_residues_index.add(atom.residue.index)
+            c1_interface_residues.add(atom.residue)
 
     for atom in chain2.atoms:
-        if (np.linalg.norm(pos_c1 - atom.position.magnitude, axis=1) < threshold).any():
-            if atom.residue.index not in c2_interface_residues_index:
-                c2_interface_residues_index.add(atom.residue.index)
-                c2_interface_residues.add(atom.residue)
+        if (
+            np.linalg.norm(pos_c1 - atom.position.magnitude, axis=1) < threshold
+        ).any() and atom.residue.index not in c2_interface_residues_index:
+            c2_interface_residues_index.add(atom.residue.index)
+            c2_interface_residues.add(atom.residue)
     return c1_interface_residues, c2_interface_residues
 
 
@@ -28,9 +30,7 @@ def have_interface_ligands(
 ):
 
     def filter_ligand(res, mass_threshold):
-        if res.is_protein or res.is_water or res.mass < mass_threshold:
-            return False
-        return True
+        return not (res.is_protein or res.is_water or res.mass < mass_threshold)
 
     filtered_ligands = list(filter(lambda x: filter_ligand(x, mass_threshold), topology.residues))
     if len(filtered_ligands) == 0:

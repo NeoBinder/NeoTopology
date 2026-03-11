@@ -1,1 +1,1 @@
-from .rotation import RotationMatrix
+from .rotation import RotationMatrix as RotationMatrix

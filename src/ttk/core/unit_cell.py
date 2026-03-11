@@ -57,7 +57,7 @@ class UnitCell:
 
         if not hasattr(positions, "shape"):
             # if isnot np ndarray
-            positions = np.asarray([_pos for _pos in positions])
+            positions = np.asarray(list(positions))
         positions = positions.value_in_unit(openmm_unit.nanometer)
         box_vec = positions.max(0) - positions.min(0) + 1.0
         box_matrix = np.eye(4)

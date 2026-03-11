@@ -1,5 +1,5 @@
 import ttk
-from ttk.core import Entity
+from ttk.core.entity import Entity
 from ttk.math.vector import calc_dihedral
 
 

@@ -197,7 +197,7 @@ class TestRigidTransform3D:
         A = np.array([[1.0, 2.0], [3.0, 4.0]])  # 2x2
         B = np.array([[1.0, 2.0], [3.0, 4.0]])
 
-        with pytest.raises(Exception):
+        with pytest.raises(ValueError):
             rigid_transform_3D(A, B)
 
 

@@ -131,13 +131,11 @@ class Bond:
         return hash(self.atom1) ^ hash(self.atom2)
 
     def __eq__(self, bond):
-        if bond.type == self.type:
-            if self.atom1 in [bond.atom1, bond.atom2] and self.atom2 in [
-                bond.atom1,
-                bond.atom2,
-            ]:
-                return True
-        return False
+        return (
+            bond.type == self.type
+            and self.atom1 in [bond.atom1, bond.atom2]
+            and self.atom2 in [bond.atom1, bond.atom2]
+        )
 
     def __repr__(self):
         output = f"Bond({self.atom1}, {self.atom2}"
@@ -153,7 +151,7 @@ class Bond:
         elif atom is self.atom2:
             return self.atom1
         else:
-            raise Exception("Bond and Atom have no correspondence")
+            raise ValueError("Bond and Atom have no correspondence")
 
     #  def __getnewargs__(self):
     #  """

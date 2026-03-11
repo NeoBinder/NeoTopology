@@ -39,7 +39,6 @@ class DataCategoriesContainer:
     def to_dataframe(self, index_name="id"):
         df = pd.DataFrame(self.data, columns=self.categories)
         if index_name:
-            df[index] = df[index_name]
             df = df.set_index(index_name)
         return df
 
@@ -159,7 +158,7 @@ class PDBxParser:
         cell = self.data_dict.get("cell", None)
         if cell:
             cell_parameter = cell.data
-            periodic_box = UnitCell.from_parameter(
+            UnitCell.from_parameter(
                 a_length=cell_parameter["length_a"],
                 b_length=cell_parameter["length_b"],
                 c_length=cell_parameter["length_c"],
@@ -202,7 +201,7 @@ class PDBxParser:
             )
             atoms_map[f"{chainid}-{atom.index}"] = atom
 
-        for idx, row in self.data_categories_dict["struct_conn"].to_dataframe(index_name=None):
+        for _idx, row in self.data_categories_dict["struct_conn"].to_dataframe(index_name=None):
             src_atom = atoms_map[
                 "{}-{}".format(row["ptnr1_label_asym_id"], row["ptnr1_label_atom_id"])
             ]
@@ -212,8 +211,7 @@ class PDBxParser:
             top.add_bond(src_atom, trg_atom, from_bond_name(row["conn_type_id"]))
 
     def parse_bond_template(self):
-        templates = {}
-        for idx, row in self.data_categories_dict["chem_comp_bond"].to_dataframe(
+        for _idx, _row in self.data_categories_dict["chem_comp_bond"].to_dataframe(
             index_name="comp_id"
         ):
             pass

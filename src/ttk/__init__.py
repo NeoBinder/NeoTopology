@@ -4,4 +4,4 @@ from pint import UnitRegistry
 
 unit = UnitRegistry()
 
-from .topology import Topology
+from .topology import Topology as Topology  # noqa: E402

@@ -6,7 +6,7 @@ import numpy as np
 import ttk
 from ttk import Topology
 from ttk.core import UnitCell, element_from_symbol, from_bond_float, from_rdkit_bond
-from ttk.io import PDBParser
+from ttk.io import PDBParser, PDBxParser
 
 
 def topology_from_openmmm(mm_topology, positions=None, keepIdx=True, parse_protein_bond=True):
@@ -18,7 +18,7 @@ def topology_from_openmmm(mm_topology, positions=None, keepIdx=True, parse_prote
     atom_map = {}
     for chain in mm_topology.chains():
         c = top.add_chain(chain.id)
-        for index, residue in enumerate(chain.residues()):
+        for _index, residue in enumerate(chain.residues()):
             res = top.add_residue(residue.name, c, residue.id)
             for atom in residue.atoms():
                 if positions is None:
@@ -80,7 +80,7 @@ def topology_from_pdb(pdbpath, **kwargs):
 
 def topology_from_pdbx_content(pdbx_path, **kwargs):
     content = load_from_file(pdbx_path)
-    parser = PDBxReader(**kwargs)
+    parser = PDBxParser(**kwargs)
     parser.parse_from_content(content)
     top = parser.topologies[-1]
     return top
@@ -101,7 +101,7 @@ def topology_from_rdkitmol(mol, res_name):
     positions = mol.GetConformer().GetPositions()
     atom_map = {}
 
-    for atom, pos in zip(atoms, positions):
+    for atom, pos in zip(atoms, positions, strict=False):
         symbol = atom.GetSymbol()
         atom_counter.update(symbol)
         newatom = top.add_atom(

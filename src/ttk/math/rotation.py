@@ -5,7 +5,7 @@ def apply_matrix_1d(vec, matrix):
     vec_dim = vec.shape[0]
     if vec_dim == 3:
         vec = np.asarray([*vec, 1])
-    return matrix.dot(vec)[:, :vec_dim]
+    return matrix.dot(vec)[:vec_dim]
 
 
 def apply_matrix_2d(vecs, matrix):
@@ -21,11 +21,11 @@ def rigid_transform_3D(A, B):
 
     num_rows, num_cols = A.shape
     if num_rows != 3:
-        raise Exception(f"matrix A is not 3xN, it is {num_rows}x{num_cols}")
+        raise ValueError(f"matrix A is not 3xN, it is {num_rows}x{num_cols}")
 
     num_rows, num_cols = B.shape
     if num_rows != 3:
-        raise Exception(f"matrix B is not 3xN, it is {num_rows}x{num_cols}")
+        raise ValueError(f"matrix B is not 3xN, it is {num_rows}x{num_cols}")
 
     # find mean row wise (每个坐标维度求均值）
     centroid_A = np.mean(A, axis=1)

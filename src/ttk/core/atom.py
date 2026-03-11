@@ -103,12 +103,12 @@ class Atom:
     @property
     def is_backbone(self):
         """Whether the atom is in the backbone of a protein residue"""
-        return self.name in set(["C", "CA", "N", "O"]) and self.residue.is_protein
+        return self.name in {"C", "CA", "N", "O"} and self.residue.is_protein
 
     @property
     def is_sidechain(self):
         """Whether the atom is in the sidechain of a protein residue"""
-        return self.name not in set(["C", "CA", "N", "O", "HA", "H"]) and self.residue.is_protein
+        return self.name not in {"C", "CA", "N", "O", "HA", "H"} and self.residue.is_protein
 
     @property
     def segment_id(self):

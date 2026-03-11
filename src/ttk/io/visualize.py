@@ -7,6 +7,7 @@ from bokeh.models import ColumnDataSource, Range1d
 from bokeh.models.glyphs import Rect, Text
 from bokeh.plotting import figure
 
+from ttk.calculator.dimer import find_interface
 from ttk.io import PDBFile, align
 
 # import matplotlib.colors as mcolors
@@ -225,7 +226,8 @@ def visualise_topology(topology, show_interface=False):
 
 def visualise_pdb(pdb_fpath):
     view = py3Dmol.view(width=500, height=500)
-    view.addModel(open(pdb_fpath).read(), "pdb")
+    with open(pdb_fpath) as f:
+        view.addModel(f.read(), "pdb")
 
     view.setHoverable(
         {},
@@ -274,7 +276,6 @@ def view_alignment(aln, fontsize="9pt", plot_width=800, starting_idx=0):
     colors = get_colors(seqs)
     N = len(seqs[0])
     S = len(seqs)
-    width = 0.4
 
     x = np.arange(1, N + 1)
     y = np.arange(0, S, 1)
@@ -285,9 +286,9 @@ def view_alignment(aln, fontsize="9pt", plot_width=800, starting_idx=0):
     gy = yy.flatten()
     # use recty for rect coords with an offset
     recty = gy + 0.5
-    h = 1 / S
+    1 / S
     # now we can create the ColumnDataSource with all the arrays
-    source = ColumnDataSource(dict(x=gx, y=gy, recty=recty, text=text, colors=colors))
+    source = ColumnDataSource({"x": gx, "y": gy, "recty": recty, "text": text, "colors": colors})
     plot_height = len(seqs) * 15 + 50
     x_range = Range1d(0, N + 1, bounds="auto")
     if N > 100:

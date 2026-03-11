@@ -1,9 +1,9 @@
-from ttk.core import (
+from ttk.core.entity import Entity
+from ttk.data import (
     _AMINO_ACID_CODES,
     _PROTEIN_RESIDUES,
     _SIMPLE_SOLVENT,
     _WATER_RESIDUES,
-    Entity,
 )
 
 
@@ -35,7 +35,7 @@ class Residue(Entity):
         self.property_computed = {}
 
     def __str__(self):
-        return "%s-%s" % (self.name, self.res_seq)
+        return f"{self.name}-{self.res_seq}"
 
     def __repr__(self):
         return f"Residue:{str(self)} at {hex(id(self))}"
@@ -78,8 +78,8 @@ class Residue(Entity):
 
     @property
     def is_valid_backbone(self):
-        atoms_set = set([atom.clean_name for atom in self.atoms])
-        backbone_set = set(["N", "CA", "C"])
+        atoms_set = {atom.clean_name for atom in self.atoms}
+        backbone_set = {"N", "CA", "C"}
         return len(backbone_set.intersection(atoms_set)) == 3
 
     @property

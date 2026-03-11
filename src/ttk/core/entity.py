@@ -22,7 +22,7 @@ class Entity:
     @positions.setter
     def positions(self, pos):
         atoms = self.atoms
-        assert isinstance(pos, np.ndarray) or isinstance(pos, ttk.unit.Quantity)
+        assert isinstance(pos, (np.ndarray, ttk.unit.Quantity))
         assert pos.shape[0] == len(atoms)
         assert pos.shape[1] == 3
 
@@ -92,9 +92,9 @@ class Entity:
             raise ValueError(
                 "Both input sets of observations must have the same number of features."
             )
-        for i, xa in enumerate(source_positions):
+        for _i, xa in enumerate(source_positions):
             # Loop over all samples in set XB
-            for j, xb in enumerate(target_positions):
+            for _j, xb in enumerate(target_positions):
                 dist = np.sqrt(np.sum((xa - xb) ** 2))
                 if dist < threshold:
                     return True
