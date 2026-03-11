@@ -74,19 +74,13 @@ class PDBParser:
         fullname = line[12:16]
         # get rid of whitespace in atom names
         split_list = fullname.split()
-        if len(split_list) != 1:
-            # atom name has internal spaces, e.g. " N B ", so
-            # we do not strip spaces
-            pass
-        else:
+        if len(split_list) == 1:
             # atom name is like " CA ", so we can strip spaces
-            split_list[0]
-        line[16]
+            fullname = split_list[0]
         try:
             serial_number = int(line[6:11])
         except Exception:
             serial_number = 0
-        line[26]  # insertion code
         x = float(line[30:38])
         y = float(line[38:46])
         z = float(line[46:54])
@@ -100,9 +94,8 @@ class PDBParser:
             temperature_factor = 0.0
         element_symbol = line[76:78].strip()
         if element_symbol == self.config.get("extraParticleIdentifier", "EP"):
-            pass
-        else:
-            atom_element = element_from_symbol(element_symbol)
+            return  # skip extra particles
+        atom_element = element_from_symbol(element_symbol)
         try:
             formal_charge = int(line[78:80])
         except ValueError:
