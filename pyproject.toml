@@ -44,8 +44,8 @@ dev = [
 ]
 
 [tool.ruff]
-# Target Python version
-target-version = "py311"
+# 指定目标 Python 版本
+target-version = "py312"
 
 # Maximum line length
 line-length = 100
@@ -94,7 +94,7 @@ known-first-party = ["ttk"]
 
 [tool.mypy]
 # 指定目标 Python 版本
-python_version = "3.11"
+python_version = "3.12"
 
 # 报告未使用的导入
 warn_unused_ignores = true
