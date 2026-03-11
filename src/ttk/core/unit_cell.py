@@ -9,15 +9,9 @@ RAD_TO_DEG = 180 / math.pi
 
 def parameters_to_box_matrix(a_length, b_length, c_length, alpha, beta, gamma):
     a = np.array([a_length.magnitude, 0, 0])
-    b = np.array(
-        [b_length.magnitude * math.cos(gamma), b_length.magnitude * math.sin(gamma), 0]
-    )
+    b = np.array([b_length.magnitude * math.cos(gamma), b_length.magnitude * math.sin(gamma), 0])
     cx = c_length.magnitude * math.cos(beta)
-    cy = (
-        c_length.magnitude
-        * (math.cos(alpha) - math.cos(beta) * math.cos(gamma))
-        / math.sin(gamma)
-    )
+    cy = c_length.magnitude * (math.cos(alpha) - math.cos(beta) * math.cos(gamma)) / math.sin(gamma)
     cz = math.sqrt(c_length.magnitude * c_length.magnitude - cx * cx - cy * cy)
     c = np.array([cx, cy, cz])
 
@@ -52,9 +46,7 @@ class UnitCell:
 
         top_PeriodicBoxVectors = topology.getPeriodicBoxVectors()
         if top_PeriodicBoxVectors:
-            box_matrix = np.array(
-                top_PeriodicBoxVectors.value_in_unit(openmm_unit.nanometer)
-            )
+            box_matrix = np.array(top_PeriodicBoxVectors.value_in_unit(openmm_unit.nanometer))
         else:
             raise NotImplementedError("openmm topology not defined")
         return cls(box_matrix)
@@ -92,23 +84,17 @@ class UnitCell:
         gamma = float(gamma) * math.pi / 180.0 * unit.radians
         if a_length < threshold or b_length < threshold or c_length < threshold:
             raise ValueError(
-                "a: {}, b: {},c: {} not meet threshold:{}".format(
-                    a_length, b_length, c_length, threshold
-                )
+                f"a: {a_length}, b: {b_length},c: {c_length} not meet threshold:{threshold}"
             )
 
-        box_matrix = parameters_to_box_matrix(
-            a_length, b_length, c_length, alpha, beta, gamma
-        )
+        box_matrix = parameters_to_box_matrix(a_length, b_length, c_length, alpha, beta, gamma)
         return cls(box_matrix)
 
     @classmethod
     def from_content(cls, content, threshold=(1e-6) * unit.nanometer):
         # unit in angstrom
         if not content.startswith("CRYST1"):
-            raise NotImplementedError(
-                "{}\n not supported for parsing unit cell".format(content)
-            )
+            raise NotImplementedError(f"{content}\n not supported for parsing unit cell")
         a_length = (float(content[6:15]) * unit.angstrom).to(unit.nanometer)
         b_length = (float(content[15:24]) * unit.angstrom).to(unit.nanometer)
         c_length = (float(content[24:33]) * unit.angstrom).to(unit.nanometer)
@@ -118,14 +104,10 @@ class UnitCell:
 
         if a_length < threshold or b_length < threshold or c_length < threshold:
             raise ValueError(
-                "a: {}, b: {},c: {} not meet threshold:{}".format(
-                    a_length, b_length, c_length, threshold
-                )
+                f"a: {a_length}, b: {b_length},c: {c_length} not meet threshold:{threshold}"
             )
 
-        box_matrix = parameters_to_box_matrix(
-            a_length, b_length, c_length, alpha, beta, gamma
-        )
+        box_matrix = parameters_to_box_matrix(a_length, b_length, c_length, alpha, beta, gamma)
 
         return cls(box_matrix)
 

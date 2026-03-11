@@ -1,10 +1,11 @@
 import datetime
 from collections import Counter
+
 import numpy as np
 
 import ttk
 from ttk import unit
-from ttk.core import element_from_symbol, UnitCell, from_bond_float
+from ttk.core import UnitCell, element_from_symbol, from_bond_float
 
 from .PDBUtil import parse_pdb_header_list, split_pdb_content
 
@@ -175,7 +176,7 @@ class PDBParser:
                 self._current_topology = None
                 self._parse_dict = {}
             elif record_type in ("SIGUIJ", "SIGATM"):
-                raise NotImplemented("valid value without implementation")
+                raise NotImplementedError("valid value without implementation")
             elif record_type not in {
                 "ATOM",
                 "HETATM",
@@ -274,34 +275,34 @@ class PDBFile:
                     if len(atom.symbol) > 3:
                         raise Exception("atom symbol greater than 3 letter")
                     desc += recordName
-                    desc += "{:>5} ".format(index)
+                    desc += f"{index:>5} "
                     if len(atom.name) < 4:
-                        desc += " {:<3} ".format(atom.name)
+                        desc += f" {atom.name:<3} "
                     elif len(atom.name) == 4:
-                        desc += "{:<4} ".format(atom.name)
+                        desc += f"{atom.name:<4} "
                     else:
-                        raise Exception("atom name '{}' is longger than 4 !!".format(atom.name))
+                        raise Exception(f"atom name '{atom.name}' is longger than 4 !!")
                     if len(res.name) > 3:
                         resname = res.name[:3]
                     else:
                         resname = res.name
-                    desc += "{:>3} ".format(resname)
+                    desc += f"{resname:>3} "
                     desc += chain.id
                     if config.get("use_res_index"):
-                        desc += "{:>4} ".format(res.index)
+                        desc += f"{res.index:>4} "
                     else:
-                        desc += "{:>4} ".format(res.res_seq)
+                        desc += f"{res.res_seq:>4} "
                     desc += "   "
                     desc += "{:8.3f}{:8.3f}{:8.3f}".format(
                         *(atom.position.to("angstrom").magnitude)
                     )
-                    desc += "{:6.2f}{:6.2f}".format(atom.occupancy, atom.bfactor)
+                    desc += f"{atom.occupancy:6.2f}{atom.bfactor:6.2f}"
                     desc += "      "
                     desc += res.segment_id.rjust(4, " ")
                     desc += atom.symbol.rjust(2, " ")
                     content += desc + "\n"
             index += 1
-            desc = "TER   {:>5}      {} {} {:>3}\n".format(index, resname, chain.id, res.res_seq)
+            desc = f"TER   {index:>5}      {resname} {chain.id} {res.res_seq:>3}\n"
             content += desc
         return content
 

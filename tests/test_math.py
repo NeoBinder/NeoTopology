@@ -1,9 +1,10 @@
 """测试 ttk.math 模块"""
 
-import pytest
 import numpy as np
-from ttk.math.vector import unit_vector, angle_between, calc_dihedral
+import pytest
+
 from ttk.math.rotation import RotationMatrix, apply_matrix_1d, apply_matrix_2d, rigid_transform_3D
+from ttk.math.vector import angle_between, calc_dihedral, unit_vector
 
 
 class TestUnitVector:

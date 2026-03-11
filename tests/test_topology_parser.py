@@ -1,9 +1,9 @@
 """测试 ttk.io.topology_parser 模块"""
 
 import pytest
-from ttk.io import topology_parser
+
 from ttk import Topology
-from ttk.core import element_from_symbol
+from ttk.io import topology_parser
 
 
 class TestTopologyParser:

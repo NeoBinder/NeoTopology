@@ -19,9 +19,7 @@ from pymol import cmd
 p = argparse.ArgumentParser()
 p.add_argument("-m", type=str, required=True, help="mobile pdbf")
 p.add_argument("-t", type=str, required=True, help="target pdbf")
-p.add_argument(
-    "-o", type=str, required=False, help="output filename (no need for suffix)"
-)
+p.add_argument("-o", type=str, required=False, help="output filename (no need for suffix)")
 p.add_argument(
     "-mode",
     type=str,
@@ -57,7 +55,7 @@ if __name__ == "__main__":
 
         cmd.save(args.o + ".pdb", selection=args.o)
         cmd.save(args.o + ".aln", selection=args.o)
-        print("Saving to {}".format(args.o))
+        print(f"Saving to {args.o}")
 
     if args.mode == "cealign":
         print(res)
@@ -72,19 +70,11 @@ if __name__ == "__main__":
             num_aln_res,
         ) = res
         print(
-            "----RMSD after refinement: {} \n\
-        Number of aligned atoms after refinement: {} \n\
-        Number of refinement cycles: {} \n\
-        RMSD before refinement: {} \n\
-        Number of aligned atoms before refinement: {} \n\
-        Raw alignment score: {} \n\
-        Number of residues aligned: {} ".format(
-                rmsd_after_refine,
-                num_aln_atoms_after_refinement,
-                num_cycles,
-                rmsd_before_refine,
-                num_aln_atoms_before_refinement,
-                raw_aln_score,
-                num_aln_res,
-            )
+            f"----RMSD after refinement: {rmsd_after_refine} \n\
+        Number of aligned atoms after refinement: {num_aln_atoms_after_refinement} \n\
+        Number of refinement cycles: {num_cycles} \n\
+        RMSD before refinement: {rmsd_before_refine} \n\
+        Number of aligned atoms before refinement: {num_aln_atoms_before_refinement} \n\
+        Raw alignment score: {raw_aln_score} \n\
+        Number of residues aligned: {num_aln_res} "
         )

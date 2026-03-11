@@ -19,13 +19,11 @@ table_re = re.compile(r"(?:'([^']*)'|(\S+))")
 
 
 class DefinitionContainer:
-
     def __init__(self):
         self.data_type = "definition"
 
 
 class DataCategoriesContainer:
-
     def __init__(self, group):
         self.data_type = "data_categories"
         self.group = group
@@ -51,7 +49,6 @@ class DataCategoriesContainer:
 
 
 class DataContainer:
-
     def __init__(self, category):
         self.data_type = "data"
         self.category = category
@@ -91,9 +88,7 @@ def process_group(chunk, current_group):
                 array = ["".join(match) for match in table_re.findall(line)]
                 current_container.add_value(array)
     else:
-        raise NotImplementedError(
-            "current_category {} not implemented".format(current_group)
-        )
+        raise NotImplementedError(f"current_category {current_group} not implemented")
     return current_container
 
 
@@ -117,7 +112,6 @@ def process_category(chunk):
 
 
 class PDBxParser:
-
     def __init__(self, config=None, **kwargs):
         if config is None:
             self.config = {"remove_water": False}
@@ -190,7 +184,7 @@ class PDBxParser:
             resname = row["label_comp_id"]
             res_seq = row["label_seq_id"]
             res = top.add_residue(resname, chains_map[chainid], res_seq=res_seq)
-            residues_map["{}-{}".format(chainid, res_seq)] = res
+            residues_map[f"{chainid}-{res_seq}"] = res
 
             is_hetero = row["group_PDB"] == "ATOM"
             atom = top.add_atom(
@@ -198,10 +192,7 @@ class PDBxParser:
                 element_from_symbol(row["type_symbol"]),
                 res,
                 position=unit.Quantity(
-                    np.array(row["Cartn_x"], row["Cartn_y"], row["Cartn_x"]).astype(
-                        float
-                    )
-                    / 10,
+                    np.array(row["Cartn_x"], row["Cartn_y"], row["Cartn_x"]).astype(float) / 10,
                     "nm",
                 ),
                 index=int(idx),
@@ -209,11 +200,9 @@ class PDBxParser:
                 occupancy=row["occupancy"],
                 is_hetero=is_hetero,
             )
-            atoms_map["{}-{}".format(chainid, atom.index)] = atom
+            atoms_map[f"{chainid}-{atom.index}"] = atom
 
-        for idx, row in self.data_categories_dict["struct_conn"].to_dataframe(
-            index_name=None
-        ):
+        for idx, row in self.data_categories_dict["struct_conn"].to_dataframe(index_name=None):
             src_atom = atoms_map[
                 "{}-{}".format(row["ptnr1_label_asym_id"], row["ptnr1_label_atom_id"])
             ]
