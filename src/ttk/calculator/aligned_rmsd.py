@@ -147,7 +147,5 @@ if __name__ == "__main__":
     print("=======Pocket stats=======")
     print(f"Mean RMSD between carbon alpha: {np.mean(list(rmsd_ca.values()))}")
     print(
-        "Mean RMSD between all atoms (matched same residues only): {}".format(
-            np.mean(list(rmsd_aa.values()))
-        )
+        f"Mean RMSD between all atoms (matched same residues only): {np.mean(list(rmsd_aa.values()))}"
     )

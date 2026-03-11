@@ -193,9 +193,7 @@ class PDBParser:
                 UNKNOWN_RECORD_TYPE.append(record_type)
                 #  raise ValueError("invalid value {}".format(line))
                 print(
-                    "There are unknown record type:{}\n Please pay attention or ignore it".format(
-                        set(UNKNOWN_RECORD_TYPE)
-                    )
+                    f"There are unknown record type:{set(UNKNOWN_RECORD_TYPE)}\n Please pay attention or ignore it"
                 )
         self.parse_bonds(bonds)
 

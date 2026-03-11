@@ -76,9 +76,7 @@ class Entity:
             dist = np.linalg.norm(
                 atom.position.to(ttk.unit.nanometer).magnitude - coords, axis=dim - 1
             )
-            if dim == 2 and (dist < threshold).any():
-                selected_atoms.append(atom)
-            elif dim == 1 and dist < threshold:
+            if dim == 2 and (dist < threshold).any() or dim == 1 and dist < threshold:
                 selected_atoms.append(atom)
 
         selected_atoms = filter_atom_types(selected_atoms, atom_type)
