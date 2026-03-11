@@ -1,8 +1,6 @@
-import numpy as np
-import itertools
+import ttk
 from ttk.core import Entity
 from ttk.math.vector import calc_dihedral
-import ttk
 
 
 class Chain(Entity):
@@ -32,9 +30,7 @@ class Chain(Entity):
         self.chain_id = chain_id
 
     def __repr__(self):
-        return "Chain {} with {} residue at {}".format(
-            self.index, len(self.residues), hex(id(self))
-        )
+        return f"Chain {self.index} with {len(self.residues)} residue at {hex(id(self))}"
 
     #########################################
     # get methods

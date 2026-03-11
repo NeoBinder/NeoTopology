@@ -1,7 +1,5 @@
 import numpy as np
 
-from .dimer import find_interface
-
 
 def get_center_of_mass(atoms):
     total_mass = 0.0

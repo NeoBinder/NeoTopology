@@ -1,12 +1,9 @@
 import collections
-import os
-import tempfile
 
 import numpy as np
 import py3Dmol
-from Bio import AlignIO, SeqIO
 from bokeh.layouts import gridplot
-from bokeh.models import ColumnDataSource, Grid, Plot, Range1d
+from bokeh.models import ColumnDataSource, Range1d
 from bokeh.models.glyphs import Rect, Text
 from bokeh.plotting import figure
 
@@ -179,9 +176,7 @@ def visualise_topology(topology, show_interface=False):
             for j in range(i + 1, num_chains):
                 c1, c2 = topology.chains[i], topology.chains[j]
                 c1_res, c2_res = find_interface(c1, c2)
-                c1_res_idx, c2_res_idx = [x.index for x in c1_res], [
-                    x.index for x in c2_res
-                ]
+                c1_res_idx, c2_res_idx = [x.index for x in c1_res], [x.index for x in c2_res]
                 interfaces[i] = interfaces[i].union(c1_res_idx)
                 interfaces[j] = interfaces[j].union(c2_res_idx)
 
@@ -230,7 +225,7 @@ def visualise_topology(topology, show_interface=False):
 
 def visualise_pdb(pdb_fpath):
     view = py3Dmol.view(width=500, height=500)
-    view.addModel(open(pdb_fpath, "r").read(), "pdb")
+    view.addModel(open(pdb_fpath).read(), "pdb")
 
     view.setHoverable(
         {},

@@ -1,7 +1,7 @@
 import ttk
 
 
-class Atom(object):
+class Atom:
     """An Atom object represents a residue within a Topology.
     Attributes
     ----------
@@ -42,10 +42,10 @@ class Atom(object):
         return self.properties["clean_name"]
 
     def __str__(self):
-        return "{}-{}".format(self.residue, self.name)
+        return f"{self.residue}-{self.name}"
 
     def __repr__(self):
-        return "<Atom:{} at {}>".format(str(self), hex(id(self)))
+        return f"<Atom:{str(self)} at {hex(id(self))}>"
 
     def __eq__(self, value):
         return id(self) == id(value)
@@ -108,10 +108,7 @@ class Atom(object):
     @property
     def is_sidechain(self):
         """Whether the atom is in the sidechain of a protein residue"""
-        return (
-            self.name not in set(["C", "CA", "N", "O", "HA", "H"])
-            and self.residue.is_protein
-        )
+        return self.name not in set(["C", "CA", "N", "O", "HA", "H"]) and self.residue.is_protein
 
     @property
     def segment_id(self):

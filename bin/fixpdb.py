@@ -1,6 +1,5 @@
 import argparse
 
-from openmm.app import PDBFile
 from pdbfixer import PDBFixer
 
 parser = argparse.ArgumentParser(description="fix protein pdb")
@@ -43,8 +42,7 @@ def fix_protein(protein_path, padding=1.0 * unit.nanometer, pH_value=7.4, addH=T
 
     positions = np.array(positions)
     box_vec = np.eye(3) * (
-        (positions.max(0) - positions.min(0)).max()
-        + padding.value_in_unit(unit.nanometer) * 2
+        (positions.max(0) - positions.min(0)).max() + padding.value_in_unit(unit.nanometer) * 2
     )
 
     protein_pdb.topology.setPeriodicBoxVectors(box_vec)
@@ -54,6 +52,4 @@ def fix_protein(protein_path, padding=1.0 * unit.nanometer, pH_value=7.4, addH=T
 
 
 if __name__ == "__main__":
-    fix_protein(
-        args.input, padding=args.padding, pH_value=args.pH, addH=args.addHydrogens
-    )
+    fix_protein(args.input, padding=args.padding, pH_value=args.pH, addH=args.addHydrogens)
