@@ -101,7 +101,7 @@ def topology_from_rdkitmol(mol, res_name):
     positions = mol.GetConformer().GetPositions()
     atom_map = {}
 
-    for atom, pos in zip(atoms, positions):
+    for atom, pos in zip(atoms, positions, strict=False):
         symbol = atom.GetSymbol()
         atom_counter.update(symbol)
         newatom = top.add_atom(

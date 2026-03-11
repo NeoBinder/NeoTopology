@@ -93,7 +93,7 @@ def get_alignment_from_local(localf):
             source.append(line)
 
     align_res_dict = {}
-    for t, s in zip(target, source):
+    for t, s in zip(target, source, strict=False):
         seq_t = t.split()[3]
         seq_s = s.split()[3]
         assert len(seq_t) == len(seq_s)

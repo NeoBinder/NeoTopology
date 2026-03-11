@@ -26,7 +26,6 @@ def find_interface(chain1, chain2, threshold=0.3):
 def have_interface_ligands(
     topology, mass_threshold=100.0, distance_threshold=5.0, sequence_length_threshold=50
 ):
-
     def filter_ligand(res, mass_threshold):
         if res.is_protein or res.is_water or res.mass < mass_threshold:
             return False
