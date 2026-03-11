@@ -140,8 +140,8 @@ class Topology(Entity):
     def add_chain(self, chain_id=None):
         if chain_id is None:
             exist_ids = set([c.id for c in self.chains])
-            # _PROTEIN_LETTERS is frozenset
-            for p_id in _PROTEIN_LETTERS:
+            # _PROTEIN_LETTERS is frozenset; sort for deterministic alphabetical order
+            for p_id in sorted(_PROTEIN_LETTERS):
                 if p_id not in exist_ids:
                     chain_id = p_id
                     break

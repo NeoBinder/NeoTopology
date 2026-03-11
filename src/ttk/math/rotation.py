@@ -5,7 +5,7 @@ def apply_matrix_1d(vec, matrix):
     vec_dim = vec.shape[0]
     if vec_dim == 3:
         vec = np.asarray([*vec, 1])
-    return matrix.dot(vec)[:, :vec_dim]
+    return matrix.dot(vec)[:vec_dim]
 
 
 def apply_matrix_2d(vecs, matrix):
